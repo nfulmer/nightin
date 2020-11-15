@@ -23,10 +23,18 @@ export const submitLogin = async function(email, pass) {
         data: data_string
     })
 
-    alert("response: " + response);
     if(response) { 
-        window.sessionStorage.setItem('name', "NIMA SUBRAMANIAM")
-        window.location.href = "index.html"; 
+        window.location.href = "moviesandrecipes.html"; 
     }
-    else { window.location.href = "login.html"; }
+    else { 
+        window.location.href = "login.html"; 
+    }
 }
+
+document.getElementById("btnChangePassword").onclick = function () {
+    location.href = "password.html";
+};
+
+document.getElementById("btnDeleteAccount").onclick = function () {
+    location.href = "delete.html";
+};

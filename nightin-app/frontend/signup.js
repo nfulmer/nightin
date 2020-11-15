@@ -27,11 +27,10 @@ export const submitSignUp = async function(email, pass, fname, lname) {
         data: data_string
     })
 
-    alert("response: " + response);
     if(response) { 
-        alert("SIGN UP SUCCESSFUL - PLEASE LOGIN");
-        window.location.href = "signup.html"; }
+        window.location.href = "login.html"; 
+    }
     else { 
-        alert("SIGN UP FAILED - PLEASE TRY AGAIN");
-        window.location.href = "signup.html"; }
+        window.location.href = "signup.html"; 
+    }
 }

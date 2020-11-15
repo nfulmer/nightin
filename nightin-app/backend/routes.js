@@ -26,7 +26,9 @@ router.get('/contact', (req, res) => {
     res.sendFile('contact.html', {'root': __dirname + '/../frontend'});
 });
 
-router.post('/verifyuser', action.verifyuser);
 router.post('/signupuser', action.signupuser);
+router.post('/verifyuser', action.verifyuser);
+router.post('/updatepassword', action.updatepassword);
+router.post('/deleteuser', action.deleteuser);
 
 module.exports = router;
