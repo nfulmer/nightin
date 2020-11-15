@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="css/heading.css">
         <link rel="stylesheet" href="css/body.css">
         <script src="header.js" type = "module"></script>
+<<<<<<< Updated upstream:nightin-app/frontend/moviesandrecipes.html
 <<<<<<< HEAD
 <<<<<<< HEAD
         <script src="moviesandrecipes.js" type = "module"></script>
@@ -19,6 +20,9 @@
 =======
         <script src="movandrecip.js" type = "module"></script>
 >>>>>>> ede18cbf9755a268ae67ee68d46a5e1aa9210e22
+=======
+        <script src="recipes.js" type = "module"></script>
+>>>>>>> Stashed changes:nightin-app/frontend/recipes.html
     </head>
 
     <body id="page-top">
@@ -28,32 +32,36 @@
         <section class="page-section" id="recipes">
             <div class="container" id="contain">
                 <br><br><br>
+                <h2>Select your favorite foods or available ingredients:</h2>
                 <form>
-                    <h1>Select your favorite foods!</h1>
+                    
                     <div id="buttons">
-                        <button type="button" class="btn btn-outline-primary food">Onion</button>
-                        <button type="button" class="btn btn-outline-secondary food">Cheese</button>
-                        <button type="button" class="btn btn-outline-success food">Apple</button>
-                        <button type="button" class="btn btn-outline-warning food">Bread</button>
-                        <button type="button" class="btn btn-outline-info food">Chicken</button>
-                        <button type="button" class="btn btn-outline-dark food">Yogurt</button>
+                        <button type="button" class="btn btn-outline-primary">Onion</button>
+                        <button type="button" class="btn btn-outline-secondary">Cheese</button>
+                        <button type="button" class="btn btn-outline-success">Apple</button>
+                        <button type="button" class="btn btn-outline-warning">Bread</button>
+                        <button type="button" class="btn btn-outline-info">Chicken</button>
+                        <button type="button" class="btn btn-outline-danger">Yogurt</button>
                     </div>
                     <br>
                 </form>
                 <input type="text" class="form-control" placeholder="Enter more foods here">
-
-                <br><br>
+                <br>
                 <h3 class="text-muted">Your request:</h3>
                 <p class="lead" id="request">
-
                 </p>
                 <button type="button" class="btn btn-outline-danger" id="submit">Submit</button>
-                <button type="button" class="btn btn-outline-danger" id="reset">Reset</button>
+                <button type="button" class="btn btn-outline-danger float-right" id="reset">Reset</button>
                 <br><br>
-                <h3 class="text-muted">Here are some recipes you might like:</h3>
-                <div class="list-group" id="response">
-
+                <div class="response-container">
+                    <h3 class="text-muted" id="response-tit"></h3>
+                    <div class="list-group" id="response">
+                    </div>
                 </div>
+
+                <br><br>
+                <h3 class="text-muted">Match your movie to your ingredients!</h3>
+                <button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>
                     
             </div>
         </section>

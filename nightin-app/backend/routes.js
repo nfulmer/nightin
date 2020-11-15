@@ -10,8 +10,12 @@ router.get('/index', (req, res) => {
     res.sendFile('index.html', {'root': __dirname + '/../frontend'});
 });
 
-router.get('/moviesandrecipes', (req, res) => {
-    res.sendFile('moviesandrecipes.html', {'root': __dirname + '/../frontend'});
+router.get('/movies', (req, res) => {
+    res.sendFile('movies.html', {'root': __dirname + '/../frontend'});
+});
+
+router.get('/recipes', (req, res) => {
+    res.sendFile('recipes.html', {'root': __dirname + '/../frontend'});
 });
 
 router.get('/login', (req, res) => {

@@ -1,5 +1,29 @@
 import {makeRequest} from "./js/puppy.js";
 
+
+ // TO DO: see more results from search
+ 
+const buttons = () => {
+    return `<div id="buttons">
+    <button type="button" class="btn btn-outline-primary">Onion</button>
+    <button type="button" class="btn btn-outline-secondary">Cheese</button>
+    <button type="button" class="btn btn-outline-success">Apple</button>
+    <button type="button" class="btn btn-outline-warning">Bread</button>
+    <button type="button" class="btn btn-outline-info">Chicken</button>
+    <button type="button" class="btn btn-outline-danger">Yogurt</button>
+    </div>`;
+}
+
+const emptyReq = () => {
+    return `<div class="response-container">
+    <h3 class="text-muted" id="reponse-tit"></h3>
+    <div class="list-group" id="response">
+    </div>
+    </div>`
+}
+
+let butCol = 0;
+
 $(function() {
     $('form').on("click", genRequest);
     $('#reset').on("click", resetRequest);
@@ -14,7 +38,16 @@ $(function() {
 function addBut(event){
     let newBut = document.createElement("button");
     //newBut.type = "button";
-    newBut.className = "btn btn-outline-secondary food active";
+    let color; 
+    console.log(butCol);
+    if (butCol === 0) color = "primary"
+    else if (butCol === 1) color = "secondary"
+    else if (butCol === 2) color = "success"
+    else if (butCol === 3) color = "warning" 
+    else if (butCol === 4) color = "info"
+    else color = "danger"
+    newBut.className = `btn btn-outline-${color} food active`;
+    butCol = (butCol + 1) % 6;
     newBut.textContent = event.target.value;
     try {
         document.getElementById("buttons").append(newBut);
@@ -31,8 +64,12 @@ function addBut(event){
 
 // Handling front-end request bar
 function resetRequest(ev){
-    ev.target.className += " active";
+    //ev.target.className += " active";
     document.getElementById("request").textContent = "";
+    butCol = 0;
+    document.getElementById("buttons").replaceWith(jQuery(buttons()));
+    document.getElementById("response-request").replaceWith(jQuery(emptyReq()));
+
     //TO DO: reset buttons
 };
 
@@ -63,32 +100,15 @@ function genRequest(ev, alt){
 async function submitRequest(ev){
     ev.target.className += " active";
     let ingrs = document.getElementById("request").textContent.trim().split(", ");
-   //console.log(ingrs);
-    let baseURL = "https://recipe-puppy.p.rapidapi.com/?";
-    for (let i = 0; i<ingrs.length; i++){
-        if (i === 0){
-            baseURL += "i=" + ingrs[i].toLowerCase();
-        } else {
-            baseURL += "%2C" + ingrs[i].toLowerCase();
-        }
-    }
-
-    let result = await makeRequest(baseURL);
-    //document.getElementById("response").textContent = result;
-    // let titl = document.createElement("h3");
-    // titl.className = "text-muted";
-    // titl.textContent = "Here are some recipes you might like:";
-    //document.getElementById("contain").append(titl);
-    result = JSON.parse(result);
-    let results = result.results;
-    
-    //    document.getElementById("response").textContent += JSON.parse(result);
-    let imp = document.getElementById('response');
-    //let liss = document.createElement("ul");
-    //liss.classList.push("list-group")
+    let result = await makeRequest(ingrs);
     
     // formatting: https://getbootstrap.com/docs/4.0/components/list-group/
     // img: https://getbootstrap.com/docs/4.3/content/images/
+    document.getElementById("response-tit").textContent = "Here are some recipes you might like:";
+    let results = result.results;
+    let imp = document.createElement('div');
+    imp.className = "list-group";
+    imp.id = "response";
     for (let i = 0; i<results.length; i++){
         let ap = document.createElement("a");
         if (i%2 === 0){
@@ -96,22 +116,13 @@ async function submitRequest(ev){
         } else {
             ap.className = "list-group-item list-group-item-action list-group-item-danger";
         }
-        // let lis = document.createElement("li");
-        // lis.classList.push("list-group-item");
-        
-        
         ap.href = results[i].href;
         ap.textContent = results[i].title.trim();
-        //lis.append(ap);
         let img = document.createElement("img");
         img.src = results[i].thumbnail;
         img.className = "img-thumbnail rounded float-right";
         ap.append(img);
-        //lis.append(img);
-        imp.appendChild(ap);
-        //imp.append(img);
+        imp.append(ap);
     }
-    //imp.append(liss);
-    //document.getElementById("response").textContent = result.results;
-
+    document.getElementById("response").replaceWith(imp);
 ;}
