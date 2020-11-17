@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Night-In</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/heading.css">
+        <link rel="stylesheet" href="css/body.css">
+        <script src="header.js" type = "module"></script>
+        <script src="recipes.js" type = "module"></script>
+    </head>
+
+    <body id="page-top">
+        <div id="divroot"></div>
+        
+        
+        <section class="page-section" id="recipes">
+            <div class="container" id="contain">
+                <br><br><br>
+                <h2>Select your favorite foods or available ingredients:</h2>
+                <form>
+                    
+                    <div id="buttons">
+                        <button type="button" class="btn btn-outline-primary">Onion</button>
+                        <button type="button" class="btn btn-outline-secondary">Cheese</button>
+                        <button type="button" class="btn btn-outline-success">Apple</button>
+                        <button type="button" class="btn btn-outline-warning">Bread</button>
+                        <button type="button" class="btn btn-outline-info">Chicken</button>
+                        <button type="button" class="btn btn-outline-danger">Yogurt</button>
+                    </div>
+                    <br>
+                </form>
+                <input type="text" class="form-control" placeholder="Enter more foods here">
+                <br>
+                <h3 class="text-muted">Your request:</h3>
+                <p class="lead" id="request">
+                </p>
+                <button type="button" class="btn btn-outline-danger" id="submit">Submit</button>
+                <button type="button" class="btn btn-outline-danger float-right" id="reset">Reset</button>
+                <br><br>
+                <div class="response-container">
+                    <h3 class="text-muted" id="response-tit"></h3>
+                    <div class="list-group" id="response">
+                    </div>
+                </div>
+
+                <br><br>
+                <h3 class="text-muted">Match your movie to your ingredients!</h3>
+                <button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>
+                    
+            </div>
+        </section>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </body>
+
+</html>
