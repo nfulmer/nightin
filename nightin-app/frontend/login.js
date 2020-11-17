@@ -24,7 +24,8 @@ export const submitLogin = async function(email, pass) {
     })
 
     if(response) { 
-        window.location.href = "moviesandrecipes.html"; 
+        //TO DO: create some sort of greeting for the user on index if there's a response
+        window.location.href = "index.html"; 
     }
     else { 
         window.location.href = "login.html"; 
