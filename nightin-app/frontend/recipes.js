@@ -1,8 +1,10 @@
 import {makeRequest} from "./js/puppy.js";
-
+import {searchMovie, getPoster} from "./js/tmdb.js";
 
  // TO DO: see more results from search
  
+
+ //TO DO: need to build this is not html
 const buttons = () => {
     return `<div id="buttons">
     <button type="button" class="btn btn-outline-primary">Onion</button>
@@ -15,16 +17,21 @@ const buttons = () => {
 }
 
 const emptyReq = () => {
-    return `<div class="response-container">
+    return `<div id="response-container">
     <h3 class="text-muted" id="reponse-tit"></h3>
     <div class="list-group" id="response">
     </div>
-    </div>`
+    </div>`;
+}
+
+const food = () => {
+    return ["Yams","Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana", "Grapes", "Strawberries", "Coffee", "Salmon", "Tuna", "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Marshmellow", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball", "Dumpling", "Chili", "Falafel", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
 }
 
 let butCol = 0;
 
 $(function() {
+    $('#match').on("click", genMatch);
     $('form').on("click", genRequest);
     $('#reset').on("click", resetRequest);
     $('#submit').on("click", submitRequest);
@@ -33,7 +40,54 @@ $(function() {
             addBut(ev);
         }
     });
+    $('#food_complete').on('input', debounce(handleInput, 400));
 });
+
+// https://medium.com/@ipraveen/dissecting-the-debounce-f6b12ea7265a
+// debounce for autocomplete
+
+function debounce(func, wait){
+    let timeout;
+    return function(...args){
+        const context = this;
+        const executor = function(){
+            timeout = null;
+            func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(executor, wait);
+    }
+}
+
+function handleInput(even){
+    const inputData = even.target.value;
+    let compl_res = food().filter(foo => foo.slice(0,inputData.length) === inputData);
+    let a = document.createElement("div");
+    a.id = "autocomplete-list";
+    a.className = "autocomplete-items";
+    document.getElementById('autocomplete-list').replaceWith(a);
+    let b;
+    for (let i = 0; i<compl_res.length; i++){
+        b = document.createElement("div");
+        b.innerText = compl_res[i];
+        // let bb = document.createElement('input');
+        // bb.type = "hidden";
+        // bb.value = compl_res[i];
+        // b.append(bb);
+        b.addEventListener('click', function(e){
+            document.getElementById("food_complete").value = e.target.innerText;
+            emptyList();
+        });
+        a.append(b);
+    }
+}
+
+function emptyList(){
+    let a = document.createElement("div");
+    a.id = "autocomplete-list";
+    a.className = "autocomplete-items";
+    document.getElementById('autocomplete-list').replaceWith(a);
+}
 
 function addBut(event){
     let newBut = document.createElement("button");
@@ -68,7 +122,7 @@ function resetRequest(ev){
     document.getElementById("request").textContent = "";
     butCol = 0;
     document.getElementById("buttons").replaceWith(jQuery(buttons()));
-    document.getElementById("response-request").replaceWith(jQuery(emptyReq()));
+    document.getElementById("response-container").replaceWith(jQuery(emptyReq()));
 
     //TO DO: reset buttons
 };
@@ -100,6 +154,7 @@ function genRequest(ev, alt){
 async function submitRequest(ev){
     ev.target.className += " active";
     let ingrs = document.getElementById("request").textContent.trim().split(", ");
+    console.log(ingrs);
     let result = await makeRequest(ingrs);
     
     // formatting: https://getbootstrap.com/docs/4.0/components/list-group/
@@ -126,3 +181,46 @@ async function submitRequest(ev){
     }
     document.getElementById("response").replaceWith(imp);
 ;}
+
+async function genMatch(ev){
+    ev.target.className += " active";
+    let st = document.getElementById("request").textContent.split(",");
+    //console.log(st);
+    let results = (await searchMovie(st[0])).results;
+    console.log(results);
+    let imp = document.createElement('div');
+    imp.className = "list-group";
+    imp.id = "response_movie";
+    for (let i = 0; i<results.length; i++){
+        let ap = document.createElement("a");
+        if (i%2 === 0){
+            ap.className = "list-group-item list-group-item-action flex-column align-items-start";
+        } else {
+            ap.className = "list-group-item list-group-item-action ";
+        }
+        //ap.href = sim_results[i].href; //TO DO generate movie url
+
+        let div1 = document.createElement('div')
+        div1.className = "d-flex w-100 justify-content-between";
+        let div2 = document.createElement('div');
+        let h = document.createElement("h3");
+        h.textContent = results[i].original_title.trim();
+        h.className = "mb-1";
+        let p = document.createElement('p');
+        p.textContent = results[i].overview;
+        let img = document.createElement("img");
+        if (results[i].poster_path != null){
+            img.src = getPoster(results[i].poster_path);
+        } else {
+            img.src = "./assets/img/genposter.jpg";
+        }
+        img.className = "img-thumbnail rounded float-right";
+        div2.append(h);
+        div2.append(p);
+        div1.append(div2);
+        div1.append(img);
+        ap.append(div1);
+        imp.append(ap);
+    }
+    document.getElementById("response_movie").replaceWith(imp);
+}

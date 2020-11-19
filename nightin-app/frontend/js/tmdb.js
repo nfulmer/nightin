@@ -21,3 +21,73 @@ export async function getSimilarMovies(movie_id){
     let base = base_url() + "movie/" + movie_id + "/similar?" + api_key() + "&language=en-US&page=1";
     return await( await fetch(base)).json();
 }
+
+export async function getPopularMovies(genres, page, overall_results){
+    //if (page ==)
+    let base = base_url() + "movie/popular?" + api_key() + "&language=en-US&";
+    console.log(page);
+    if (page == 1){
+        base += "page=1";
+    } else if (page > 100) {
+        return overall_results;
+    } else {
+        base += "page=" + page;
+    }
+    let search_results = (await( await fetch(base)).json()).results;
+    if (genres === []){
+        return search_results;
+    }
+    for (let i = 0; i < search_results.length; i++){
+        let ids = search_results[i].genre_ids;
+        let meets_criteria = true;
+        for (let j = 0; j < genres.length; j++){
+            if (!ids.includes(parseInt(genres[j]))){
+                meets_criteria = false;
+                break;
+            }
+        }
+        if (meets_criteria){
+            overall_results.push(search_results[i]);
+        }
+    }
+    if (overall_results.length < 5){
+        return getPopularMovies(genres, page + 1, overall_results);
+    } else {
+        return overall_results;
+    }
+}
+
+export async function getRatedMovies(genres, page, overall_results){
+    //if (page ==)
+    let base = base_url() + "movie/top_rated?" + api_key() + "&language=en-US&";
+    console.log(page);
+    if (page == 1){
+        base += "page=1";
+    } else if (page > 100) {
+      return overall_results;
+    } else {
+        base += "page=" + page;
+    }
+    let search_results = (await( await fetch(base)).json()).results;
+    if (genres === []){
+        return search_results;
+    }
+    for (let i = 0; i < search_results.length; i++){
+        let ids = search_results[i].genre_ids;
+        let meets_criteria = true;
+        for (let j = 0; j < genres.length; j++){
+            if (!ids.includes(parseInt(genres[j]))){
+                meets_criteria = false;
+                break;
+            }
+        }
+        if (meets_criteria){
+            overall_results.push(search_results[i]);
+        }
+    }
+    if (overall_results.length < 5){
+        return getRatedMovies(genres, page + 1, overall_results);
+    } else {
+        return overall_results;
+    }
+}

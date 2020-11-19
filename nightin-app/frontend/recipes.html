@@ -33,7 +33,14 @@
                     </div>
                     <br>
                 </form>
-                <input type="text" class="form-control" placeholder="Enter more foods here">
+                <!-- autocomplete css: https://www.w3schools.com/howto/howto_js_autocomplete.asp -->
+                <div class="autocomplete" style="position:relative">
+                    <input type="text" class="form-control" id="food_complete" placeholder="Enter more foods here">
+                    <div id="autocomplete-list">
+                        
+                    </div>
+                </div>
+
                 <br>
                 <h3 class="text-muted">Your request:</h3>
                 <p class="lead" id="request">
@@ -41,7 +48,7 @@
                 <button type="button" class="btn btn-outline-danger" id="submit">Submit</button>
                 <button type="button" class="btn btn-outline-danger float-right" id="reset">Reset</button>
                 <br><br>
-                <div class="response-container">
+                <div id="response-container">
                     <h3 class="text-muted" id="response-tit"></h3>
                     <div class="list-group" id="response">
                     </div>
@@ -50,7 +57,10 @@
                 <br><br>
                 <h3 class="text-muted">Match your movie to your ingredients!</h3>
                 <button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>
+                <br>
+                <div id="response_movie">
                     
+                </div>  
             </div>
         </section>
         

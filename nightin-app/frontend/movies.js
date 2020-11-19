@@ -1,4 +1,7 @@
-import {searchMovie,getPoster, getSimilarMovies} from "./js/tmdb.js";
+
+import {searchMovie,getPoster, getSimilarMovies, getPopularMovies, getRatedMovies} from "./js/tmdb.js";
+
+//TO-DO: make a generic movie item generating funnction?
 
 const buttons = () => {
     // TO DO generate buttons
@@ -17,8 +20,41 @@ $(function() {
     //         addBut(ev);
     //     }
     // });
+    $('#rated').on("click", getRated);
+    $('#popular').on("click", getPopular);
 });
 
+async function getPopular(ev){
+    let chosen_genres = document.getElementsByClassName("active");
+    let genres = [];
+    for (let i = 0; i<chosen_genres.length; i++){
+        genres.push(chosen_genres[i].id);
+    }
+    let results = await getPopularMovies(genres, 1, []);
+
+    // the title isn't showing up!
+    if (results === []){
+        let chan = document.getElementById("response-tit").textContent;
+        chan.textContent = "Sorry! No movies in the first 100 pages had that genre combination :(";
+    } else {
+        genMovies(results);
+    }
+    
+}
+
+async function getRated(ev){
+    let chosen_genres = document.getElementsByClassName("active");
+    let genres = [];
+    for (let i = 0; i<chosen_genres.length; i++){
+        genres.push(chosen_genres[i].id);
+    }
+    let results = await getRatedMovies(genres, 1, []);
+    if (results === []){
+        document.getElementById("response-tit").textContent = "Sorry! No movies in the first 100 pages had that genre combination :(";
+    } else {
+        genMovies(results);
+    }
+}
 
 // Handling front-end request bar
 function resetRequest(ev){
@@ -29,27 +65,8 @@ function resetRequest(ev){
 };
 
 function genRequest(ev, alt){
-    let req;
-    if (ev === null){
-        req = alt;
-    } else {
-        req = ev.target.textContent;
-        //ev.target.className += " disabled";
-        ev.target.className += " active";
-        //ev.target.off("click");
-        // TO DO: make this work
-        //ev.target.off("click", genRequest);
-        
-        //ev.target.attr("disabled", "disabled");
-    }
-    let ideal = document.getElementById("request").textContent.trim();
-    if (ideal === ""){
-        document.getElementById("request").textContent = req;
-    } else {
-        document.getElementById("request").textContent += ", " + req;
-    }
-    
-  };
+    ev.target.className += " active";
+}
 
 //aesthetic documentation: https://getbootstrap.com/docs/4.0/components/list-group/ 
 
@@ -59,11 +76,15 @@ async function getSim(even){
     let movie = document.getElementById("request").value.trim();
     let result = await searchMovie(movie);
     let sim_result = await getSimilarMovies(result.results[0].id);
-    let sim_results = sim_result.results;
+    genMovies(sim_result.results);
+    
+}
+
+function genMovies(movies){
     let imp = document.createElement('div');
     imp.className = "list-group";
     imp.id = "response";
-    for (let i = 0; i<sim_results.length; i++){
+    for (let i = 0; i<movies.length; i++){
         let ap = document.createElement("a");
         if (i%2 === 0){
             ap.className = "list-group-item list-group-item-action flex-column align-items-start";
@@ -76,13 +97,13 @@ async function getSim(even){
         div1.className = "d-flex w-100 justify-content-between";
         let div2 = document.createElement('div');
         let h = document.createElement("h3");
-        h.textContent = sim_results[i].original_title.trim();
+        h.textContent = movies[i].original_title.trim();
         h.className = "mb-1";
         let p = document.createElement('p');
-        p.textContent = sim_results[i].overview;
+        p.textContent = movies[i].overview;
         let img = document.createElement("img");
-        if (sim_results[i].poster_path != null){
-            img.src = getPoster(sim_results[i].poster_path);
+        if (movies[i].poster_path != null){
+            img.src = getPoster(movies[i].poster_path);
         } else {
             img.src = "./assets/img/genposter.jpg";
         }
