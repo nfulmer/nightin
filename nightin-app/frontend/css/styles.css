@@ -3931,6 +3931,7 @@ input[type=button].btn-block {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem;
+  
 }
 .navbar .container,
 .navbar .container-fluid,
@@ -10010,7 +10011,7 @@ h3 {
   }
 }
 .masthead {
-  padding-top: calc(6rem + 74px);
+  padding-top: calc(6rem + 0px);
   padding-bottom: 6rem;
 }
 .masthead .masthead-heading {
@@ -10026,7 +10027,7 @@ h3 {
 
 @media (min-width: 992px) {
   .masthead {
-    padding-top: calc(6rem + 104px);
+    padding-top: calc(6rem + 1px);
     padding-bottom: 6rem;
   }
   .masthead .masthead-heading {

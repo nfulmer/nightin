@@ -6,7 +6,17 @@ const handleDelete = function(e) {
     e.preventDefault();
     var email = $("#email").val();
     var pass = $("#pass").val();
-    submitDelete(email, pass);
+
+    if ( email == "" || pass=="" )
+    {
+        $('#pMessage').html('!!! Missing email/password, please fix and proceed. !!!');
+    }
+    else
+    {
+        $('#pMessage').html('');
+        submitDelete(email, pass);
+    }
+ 
 }
 
 export const submitDelete = async function(email, pass) {
@@ -23,6 +33,12 @@ export const submitDelete = async function(email, pass) {
         data: data_string
     })
 
-    if(response) { window.location.href = "index.html"; }
-    else { window.location.href = "delete.html"; }
+    if(response) {
+        $('#pMessage').html(` !!! User successfully deleted.  !!!`);
+         //window.location.href = "index.html"; 
+        }
+    else {
+        $('#pMessage').html(` !!! Delete no successful. Please try again. !!!`);
+        // window.location.href = "delete.html"; 
+        }
 }

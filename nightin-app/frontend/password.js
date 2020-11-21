@@ -1,5 +1,6 @@
 $(function() {
     $('form').on("click", "#btnUpdatePassword", handleUpdate);
+   // $('form').on("focus", "#email", handleEmailfocus);
 });
 
 const handleUpdate = function(e) {
@@ -7,7 +8,17 @@ const handleUpdate = function(e) {
     var email = $("#email").val();
     var passold = $("#passold").val();
     var passnew = $("#passnew").val();
-    submitUpdate(email, passold, passnew);
+
+    if ( email == "" || pass=="" )
+    {
+        $('#pMessage').html('!!! Missing information, please fix and proceed. !!!');
+    }
+    else
+    {
+        $('#pMessage').html('');
+        submitUpdate(email, passold, passnew);
+    }
+  
 }
 
 export const submitUpdate = async function(email, passold, passnew) {
@@ -25,6 +36,18 @@ export const submitUpdate = async function(email, passold, passnew) {
         data: data_string
     })
 
-    if(response) { window.location.href = "index.html"; }
-    else { window.location.href = "password.html"; }
+    if(response) {
+        $('#pMessage').html(' !!! Password updated successfully  !!!');   
+        //window.location.href = "index.html"; 
+    }
+    else { 
+        $('#pMessage').html(' !!! Unable to update password. Please try again.  !!!');
+            //window.location.href = "password.html";
+    }
+}
+
+const handleEmailfocus = function(e) {
+    e.preventDefault();
+
+    $('#pMessage').html(''); 
 }
