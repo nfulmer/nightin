@@ -1,6 +1,6 @@
 const appconfig = { 
     // "baseurl": "http://localhost:3000"
-    "baseurl": "https://niapp-426.herokuapp.com/"
+    "baseurl": "https://niapp-426.herokuapp.com"
 }
 
 const messages = {
