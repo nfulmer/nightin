@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
     user: dbuser, 
     password: dbpassword, 
     database: dbname,
-    insecureAuth: true
+    //insecureAuth: true
 });
 
 /* connection.connect(function(err) {
