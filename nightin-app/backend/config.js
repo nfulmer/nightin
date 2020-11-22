@@ -12,7 +12,8 @@ const dbuser = 'bd990c26ef5f50';
 const dbpassword = '361880a0';
 const dbname = 'heroku_878810d484cc9b9';
 
-var connection = mysql.createConnection({
+// var connection = mysql.createConnection({
+var connection = mysql.createPool({
     host: dbhost,
     user: dbuser, 
     password: dbpassword, 
