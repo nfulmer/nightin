@@ -4,7 +4,38 @@ import {searchMovie,getPoster, getSimilarMovies, getPopularMovies, getRatedMovie
 //TO-DO: make a generic movie item generating funnction?
 
 const buttons = () => {
-    // TO DO generate buttons
+    return ` <div id="buttons">
+    <button type="button" class="btn btn-outline-primary" id="28">Action</button>
+    <button type="button" class="btn btn-outline-secondary" id="12">Adventure</button>
+    <button type="button" class="btn btn-outline-success" id="16">Animation</button>
+    <button type="button" class="btn btn-outline-warning" id="35">Comedy</button>
+    <button type="button" class="btn btn-outline-info" id="80">Crime</button>
+    <button type="button" class="btn btn-outline-danger" id="99">Documentary</button>
+    <button type="button" class="btn btn-outline-primary" id="18">Drama</button>
+    <button type="button" class="btn btn-outline-secondary" id="10751">Family</button>
+    <button type="button" class="btn btn-outline-success" id="14">Fantasy</button>
+    <button type="button" class="btn btn-outline-warning" id="36">History</button>
+    <button type="button" class="btn btn-outline-info" id="27">Horror</button>
+    <button type="button" class="btn btn-outline-danger" id="10402">Music</button>
+    <button type="button" class="btn btn-outline-primary" id="9648">Mystery</button>
+    <button type="button" class="btn btn-outline-secondary" id="10749">Romance</button>
+    <button type="button" class="btn btn-outline-success" id="878">Science Fiction</button>
+    <button type="button" class="btn btn-outline-warning" id ="53">Thriller</button>
+    <button type="button" class="btn btn-outline-info" id="10752">War</button>
+    <button type="button" class="btn btn-outline-danger" id="37">Western</button>
+</div>`;
+}
+
+const emptyRes = () => {
+    return `<section id="movieresponse">
+    <br><br> <br>
+    <h3 class="text-muted" id="response-tit"></h3>
+    <br>
+    <div class="list-group" id="response">
+
+    </div>
+
+</section>`;
 }
 
 let butCol = 0;
@@ -83,6 +114,7 @@ async function getRated(ev){
         genres.push(chosen_genres[i].id);
     }
     let results = await getRatedMovies(genres, 1, []);
+    console.log(results);
     if (results === []){
         document.getElementById("response-tit").textContent = "Sorry! No movies in the first 100 pages had that genre combination :(";
     } else {
@@ -93,9 +125,12 @@ async function getRated(ev){
 // Handling front-end request bar
 function resetRequest(ev){
     //ev.target.className += " active";
-    document.getElementById("request").textContent = "";
     butCol = 0;
-    //TO DO: reset buttons
+    $('#buttons').replaceWith(buttons());
+    $('#movieresponse').replaceWith(emptyRes());
+    $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
+    $("#request").text = '';
+    $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
 };
 
 function genRequest(ev, alt){
@@ -164,4 +199,5 @@ function genMovies(movies){
         imp.append(ap);
     }
     document.getElementById("response").replaceWith(imp);
+    //window.location.href = "movies.html#movieresponse";
 }

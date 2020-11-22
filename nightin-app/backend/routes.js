@@ -36,5 +36,7 @@ router.post('/updatepassword', action.updatepassword);
 router.post('/deleteuser', action.deleteuser);
 router.post('/addmovie', action.addMovie);
 router.post('/getmovies', action.getmovies);
+router.post('/addrecipe', action.addrecipe);
+router.post('/getrecipes', action.getrecipes);
 
 module.exports = router;

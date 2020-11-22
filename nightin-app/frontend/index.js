@@ -11,11 +11,8 @@ $(function () {
 async function loadUser(user) {
     const $divLoggedIn = $('#loggedinuser');
     $divLoggedIn.append("Welcome " + user + "!");
-    const $divMov = $('#usermoviestit');
-    $divMov.append("Revisit your favorite movies:");
-    const $divRep = $('#userrecipestit');
-    $divRep.append("Revisit your favorite recipes:");
-    generateUserMovies();
+    
+    generateUserInfo();
     //setTimeout(changeFocus, 1000);
 }
 
@@ -23,29 +20,80 @@ function changeFocus(){
     window.location.href = "index.html#userspecific";
 }
 
-async function generateUserMovies(){
+async function generateUserInfo(){
 
     let loginn = window.sessionStorage.getItem('login');
+    console.log(loginn);
     let data_string = JSON.stringify({
         login: loginn
     });
 
-    let response = await $.ajax(appconfig.baseurl + "/getmovies", {
+    let responsem = await $.ajax(appconfig.baseurl + "/getmovies", {
         type: "POST",
         dataType: "json",
         contentType: "application/json",
         json: true,
         data: data_string
-    });
-    response = JSON.parse(response);
-    //console.log(response);
-    let usermovies = [];
-    for (let i = 0; i<response.length; i++){
-        //console.log(response[i].movieid);
-        usermovies.push(await getMovie(response[i].movieid));
+    }).catch((error) => {
+        console.error(error);
+      });
+    let responser = await $.ajax(appconfig.baseurl + "/getrecipes", {
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        json: true,
+        data: data_string
+    }).catch((error) => {
+        console.error(error);
+      });
+    console.log(responser);
+    console.log(responsem);
+    if(responsem[0].result === 'NO_FAVORITES'){
+        const $divMov = $('#usermoviestit');
+        $divMov.append("Head over to the movie page and start finding your favorites!");
+        
+    } else {
+        responsem = JSON.parse(responsem);
+        const $divMov = $('#usermoviestit');
+        $divMov.append("Revisit your favorite movies:");
+        let usermovies = [];
+        for (let i = 0; i<responsem.length; i++){
+            //console.log(response[i].movieid);
+            usermovies.push(await getMovie(responsem[i].movieid));
+        }
+        genMovies(usermovies);
     }
-    genMovies(usermovies);
-    
+
+    if (responser[0].result === "NO_FAVORITES"){
+        const $divRep = $('#userrecipestit');
+        $divRep.append("Head over to the recipe page and start finding your favorites!");
+    } else {
+        responser = JSON.parse(responser);
+        const $divRep = $('#userrecipestit');
+        $divRep.append("Revisit your favorite recipes:");
+        let imp = document.createElement('div');
+        imp.className = "list-group";
+        imp.id = "userrecipes";
+        for (let i = 0; i<responser.length; i++){
+            let ap = document.createElement("a");
+            if (i%2 === 0){
+                ap.className = "list-group-item list-group-item-action list-group-item-info";
+            } else {
+                ap.className = "list-group-item list-group-item-action list-group-item-danger";
+            }
+            ap.href = responser[i].link;
+            ap.target = "_blank";
+            ap.textContent = responser[i].title;
+            imp.append(ap);
+        }
+        document.getElementById("userrecipes").replaceWith(imp);
+        
+    }
+    let pimg = document.createElement("img");
+    pimg.src = "./assets/img/bby.jpg";
+    pimg.className = "rounded mx-auto d-block";
+    $("#pizza_place").append(pimg);
+    setTimeout(changeFocus, 2000);
 }
 
 function genMovies(movies){

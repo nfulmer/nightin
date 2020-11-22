@@ -6,6 +6,7 @@ $(function() {
 
 const handleSignUpSubmit = function(e) {
     e.preventDefault();
+    e.target.className += " active";
     var email = $("#email").val();
     var pass = $("#pass").val();
     var fname = $("#fname").val();
@@ -29,7 +30,7 @@ export const submitSignUp = async function(email, pass, fname, lname) {
         email: email,
         pass: pass
     });
-
+    console.log(data_string);
     let response = await $.ajax(appconfig.baseurl + "/signupuser", {
         type: "POST",
         dataType: "json",
@@ -37,6 +38,8 @@ export const submitSignUp = async function(email, pass, fname, lname) {
         json: true,
         data: data_string
     });
+
+    console.log(response);
 
     if(response[0].result === 'USER_ALREADY_EXISTS') {
         $('#pMessage').html(messages.SignupMessage2);
@@ -46,5 +49,6 @@ export const submitSignUp = async function(email, pass, fname, lname) {
        }
     else  {
         $('#pMessage').html(messages.SignupMessage4);
+        setTimeout(function(){window.location.href = "login.html";}, 3000);
      } 
 }

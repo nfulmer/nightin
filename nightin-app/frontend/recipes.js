@@ -15,7 +15,9 @@ const buttons = () => {
     <button type="button" class="btn btn-outline-danger">Yogurt</button>
     </div>`;
 }
-
+const emptyRes = () => {
+    return `<div id="response_movie"></div>`;  
+}
 const emptyReq = () => {
     return `<div id="response-container">
     <h3 class="text-muted" id="reponse-tit"></h3>
@@ -25,7 +27,7 @@ const emptyReq = () => {
 }
 
 const food = () => {
-    return ["Yams","Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana", "Grapes", "Strawberries", "Coffee", "Salmon", "Tuna", "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Marshmellow", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball", "Dumpling", "Chili", "Falafel", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
+    return ["Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana", "Grapes", "Cilantro", "Jalapenos" ,"Strawberries", "Coffee", "Salmon", "Tuna", "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Marshmellow", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball",  "Chili", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
 }
 
 let butCol = 0;
@@ -121,10 +123,16 @@ function resetRequest(ev){
     //ev.target.className += " active";
     document.getElementById("request").textContent = "";
     butCol = 0;
-    document.getElementById("buttons").replaceWith(jQuery(buttons()));
-    document.getElementById("response-container").replaceWith(jQuery(emptyReq()));
 
+    $("#response-container").replaceWith(emptyReq());
+    //$butDiv.replaceWith(emptyReq());
+    $("#buttons").replaceWith(buttons());
+    //document.getElementById("response-container").replaceWith(jQuery(emptyReq()));
+    $("#response_movie").replaceWith(emptyRes());
     //TO DO: reset buttons
+    $("#match").replaceWith(`<button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>`);
+    $("#submit").replaceWith(`<button type="button" class="btn btn-outline-danger" id="submit">Submit</button>`);
+    $("#submit").addEventListener("click", submitRequest);
 };
 
 function genRequest(ev, alt){
@@ -150,6 +158,54 @@ function genRequest(ev, alt){
     
   };
 
+  function genFavBut(){
+    let but = document.createElement("button");
+    but.className = "btn btn-outline-danger fav";
+    but.addEventListener("click", storeRecipeInfo);
+    let ii = document.createElement("i");
+    ii.className = "fa fa-heart";
+    but.append(ii);
+    return but;
+ }
+
+ async function storeRecipeInfo(evt){
+     evt.preventDefault();
+     let titlee;
+     let linkk;
+    console.log(evt.target);
+        
+    //console.log(evt.target.parentElement.className);
+    
+    if (evt.target.className.includes("fa-heart")){
+        titlee = evt.target.parentElement.parentElement.textContent;
+        linkk = evt.target.parentElement.parentElement.href;
+        evt.target.parentElement.className += " active";
+    } else {
+        titlee = evt.target.parentElement.textContent;
+        linkk = evt.target.parentElement.href;
+        evt.target.className += " active";
+    }
+    let loginn = window.sessionStorage.getItem('login');
+    let data_string = JSON.stringify({
+        login: loginn,
+        title: titlee,
+        link: linkk
+    });
+
+    let response = await $.ajax(appconfig.baseurl + "/addrecipe", {
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        json: true,
+        data: data_string
+    });
+
+    if(response[0].result === 'UPDATE_SUCCESS') {
+        
+     }
+
+ }
+
 // 
 async function submitRequest(ev){
     ev.target.className += " active";
@@ -172,11 +228,14 @@ async function submitRequest(ev){
             ap.className = "list-group-item list-group-item-action list-group-item-danger";
         }
         ap.href = results[i].href;
-        ap.textContent = results[i].title.trim();
+        ap.target = "_blank";
+        
+        ap.textContent = results[i].title.trim() + "       ";
         let img = document.createElement("img");
         img.src = results[i].thumbnail;
         img.className = "img-thumbnail rounded float-right";
         ap.append(img);
+        ap.append(genFavBut());
         imp.append(ap);
     }
     document.getElementById("response").replaceWith(imp);
