@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="css/heading.css">
         <link rel="stylesheet" href="css/body.css">
         <script src="header.js" type="module"></script>  
+        <script src="index.js" type="module"></script> 
+        <script src="appconfig.js"></script>
     </head>
 
     <body id="page-top">
@@ -19,7 +21,7 @@
         <div></div>
         <section class="page-section" id="signup">
             <div class="container" id="contain">
-            <div id="loggedinuser"  class="text-info  text-right h6"></div>
+            
             <header class="masthead bg-primary text-white text-center" style="background-image: url('assets/img/movie_header.jpg');">
             <div class="container d-flex align-items-center  flex-column">
                 <img class="masthead-avatar mb-5" src="assets/img/Paramount_Pictures_2013.png" alt="">
@@ -28,6 +30,33 @@
            </div>
         </header> 
         </div>
+        </section>
+        <section id="userspecific">
+            <br><br><br><br><br>
+            <div id="loggedinuser" class="text-white text-center h1 bg-info"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div id="usermoviestit" class="text-danger text-center h3">
+
+                            </div>
+                            <div id="usermovies">
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div id="userrecipestit" class="text-danger text-center h3">
+
+                            </div>
+                            <div id="userrecipes">
+                            
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
         </section>
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

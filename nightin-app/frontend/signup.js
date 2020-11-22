@@ -36,7 +36,7 @@ export const submitSignUp = async function(email, pass, fname, lname) {
         contentType: "application/json",
         json: true,
         data: data_string
-    })
+    });
 
     if(response[0].result === 'USER_ALREADY_EXISTS') {
         $('#pMessage').html(messages.SignupMessage2);

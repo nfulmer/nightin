@@ -21,7 +21,7 @@ exports.signupuser = (req, res) => {
 };
 
 exports.verifyuser = (req, res) => {
-    var selectString = "SELECT concat(firstname, ' ', lastname) as name FROM user WHERE login = '" + req.body.email + "' AND pass = '" + req.body.pass + "';";
+    var selectString = "SELECT concat(firstname, ' ', lastname) as name, login FROM user WHERE login = '" + req.body.email + "' AND pass = '" + req.body.pass + "';";
     connection.query(selectString, function(err, results) {
         console.log(results);
         var string = JSON.stringify(results);
@@ -47,4 +47,29 @@ exports.deleteuser = (req, res) => {
         if(string === '[]') { res.json(false); }
         else { res.json(true); }
     });
+};
+
+exports.addMovie = (req, res) => {
+    
+    var insertString = "INSERT INTO movie VALUES('" + req.body.login + "', '" + req.body.id + "');";
+    console.log(insertString);
+    connection.query(insertString, function(err, results) {
+        console.log(results);   
+        var string = JSON.stringify(results);
+        if(string === '[]') { res.json( [{result:'UPDATE_FAILED'}]); }
+        else { res.json( [{result:'UPDATE_SUCCESS'}]); }
+    });
+};
+
+exports.getmovies = (req, res) => {
+    var selectString = "SELECT movieid FROM movie WHERE login = '" + req.body.login +  "';";
+    connection.query(selectString, function(err, results) {
+        console.log(results);
+        var string = JSON.stringify(results);
+        if(string === '[]'){
+            res.json([{result:'NO_FAVORITES'}]);
+        }
+        else{
+            res.json(string);
+        }});
 };

@@ -13,6 +13,11 @@ export async function searchMovie(term){
     return await( await fetch(base)).json();
 }
 
+export async function getMovie(id){
+    let base = base_url() + 'movie/' + id + '?'+ api_key() + "&language=en-US";
+    return await( await fetch(base)).json();
+}
+
 export function getPoster(url){
     return "http://image.tmdb.org/t/p/w185/" + url;
 }

@@ -22,7 +22,41 @@ $(function() {
     // });
     $('#rated').on("click", getRated);
     $('#popular').on("click", getPopular);
+    //$('.fav').on("click", storeMovieInfo);
 });
+
+async function storeMovieInfo(evt){
+    let idd;
+    console.log(evt.target);
+        
+    //console.log(evt.target.parentElement.className);
+    
+    if (evt.target.className.includes("fa-heart")){
+        idd = evt.target.parentElement.parentElement.id;
+        evt.target.parentElement.className += " active";
+    } else {
+        idd = evt.target.parentElement.id;
+        evt.target.className += " active";
+    }
+    console.log(idd);
+    let loginn = window.sessionStorage.getItem('login');
+    let data_string = JSON.stringify({
+        login: loginn,
+        id: idd
+    });
+
+    let response = await $.ajax(appconfig.baseurl + "/addmovie", {
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        json: true,
+        data: data_string
+    });
+
+    if(response[0].result === 'UPDATE_SUCCESS') {
+        
+     }
+}
 
 async function getPopular(ev){
     let chosen_genres = document.getElementsByClassName("active");
@@ -80,22 +114,34 @@ async function getSim(even){
     
 }
 
+ function genFavBut(){
+    let but = document.createElement("button");
+    but.className = "btn btn-outline-danger fav";
+    but.addEventListener("click", storeMovieInfo);
+    let ii = document.createElement("i");
+    ii.className = "fa fa-heart";
+    but.append(ii);
+    return but;
+ }
+
 function genMovies(movies){
     let imp = document.createElement('div');
     imp.className = "list-group";
     imp.id = "response";
+    
     for (let i = 0; i<movies.length; i++){
         let ap = document.createElement("a");
         if (i%2 === 0){
-            ap.className = "list-group-item list-group-item-action flex-column align-items-start";
+            ap.className = "list-group-item flex-column align-items-start";
         } else {
-            ap.className = "list-group-item list-group-item-action ";
+            ap.className = "list-group-item";
         }
         //ap.href = sim_results[i].href; //TO DO generate movie url
 
         let div1 = document.createElement('div')
         div1.className = "d-flex w-100 justify-content-between";
         let div2 = document.createElement('div');
+        div2.id = movies[i].id;
         let h = document.createElement("h3");
         h.textContent = movies[i].original_title.trim();
         h.className = "mb-1";
@@ -108,8 +154,10 @@ function genMovies(movies){
             img.src = "./assets/img/genposter.jpg";
         }
         img.className = "img-thumbnail rounded float-right";
+        
         div2.append(h);
         div2.append(p);
+        div2.append(genFavBut());
         div1.append(div2);
         div1.append(img);
         ap.append(div1);

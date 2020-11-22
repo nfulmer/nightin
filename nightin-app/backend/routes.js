@@ -34,5 +34,7 @@ router.post('/signupuser', action.signupuser);
 router.post('/verifyuser', action.verifyuser);
 router.post('/updatepassword', action.updatepassword);
 router.post('/deleteuser', action.deleteuser);
+router.post('/addmovie', action.addMovie);
+router.post('/getmovies', action.getmovies);
 
 module.exports = router;

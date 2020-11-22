@@ -1,5 +1,5 @@
 const appconfig = { 
-    // "baseurl": "http://localhost:3000"
+    //"baseurl": "http://localhost:8080"
     "baseurl": "https://niapp-426.herokuapp.com"
 }
 
@@ -19,4 +19,4 @@ const messages = {
     "PasswordMessage1": "Password successfully changed."
 }
 
-module.exports = appconfig;
+//module.exports = appconfig;

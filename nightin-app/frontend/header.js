@@ -20,9 +20,4 @@ const loadHeader = function() {
 
     const $divRoot = $('#divroot');
     $divRoot.append(view);
-    let logginname = window.sessionStorage.getItem('name');
-    if (logginname != null){
-            const $divLoggedIn = $('#loggedinuser');
-            $divLoggedIn.append("Welcome  " + logginname + "!");
-        }
 }
