@@ -1,8 +1,4 @@
-const UserMessage1 = "Missing informaton. Please fill out all fields.";
-const UserMessage2 = "User already exists. Please enter a new email address.";
-const UserMessage3 = "Please try entering your information again.";
-const UserMessage4 = "Account created! Please login to continue.";
-const EmptyString="";
+
 
 $(function() {
     $('form').on("click", "#btnsignup", handleSignUpSubmit);
@@ -16,11 +12,11 @@ const handleSignUpSubmit = function(e) {
     var lname = $("#lname").val();
     if ( email == "" || pass=="" || fname ==""|| lname=="")
     {
-        $('#pMessage').html(UserMessage1);
+        $('#pMessage').html(messages.SignupMessage1);
       }
     else
     {
-        $('#pMessage').html('');
+        $('#pMessage').html(messages.EmptyString);
         submitSignUp(email, pass, fname, lname);
     }
  
@@ -34,7 +30,7 @@ export const submitSignUp = async function(email, pass, fname, lname) {
         pass: pass
     });
 
-    let response = await $.ajax("http://localhost:3000/signupuser", {
+    let response = await $.ajax(appconfig.baseurl + "/signupuser", {
         type: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -43,12 +39,12 @@ export const submitSignUp = async function(email, pass, fname, lname) {
     })
 
     if(response[0].result === 'USER_ALREADY_EXISTS') {
-        $('#pMessage').html(UserMessage2);
+        $('#pMessage').html(messages.SignupMessage2);
      }
     else if (response[0].result === 'UPDATE_FAILED'){ 
-        $('#pMessage').html(UserMessage3); 
+        $('#pMessage').html(messages.SignupMessage3); 
        }
     else  {
-        $('#pMessage').html(UserMessage4);
+        $('#pMessage').html(messages.SignupMessage4);
      } 
 }

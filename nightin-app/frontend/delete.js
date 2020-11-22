@@ -9,11 +9,11 @@ const handleDelete = function(e) {
 
     if ( email == "" || pass=="" )
     {
-        $('#pMessage').html('!!! Missing email/password, please fix and proceed. !!!');
+        $('#pMessage').html(messages.SignupMessage1);
     }
     else
     {
-        $('#pMessage').html('');
+        $('#pMessage').html(messages.EmptyString);
         submitDelete(email, pass);
     }
  
@@ -25,7 +25,7 @@ export const submitDelete = async function(email, pass) {
         pass: pass
     });
 
-    let response = await $.ajax("http://localhost:3000/deleteuser", {
+    let response = await $.ajax(appconfig.baseurl + "/deleteuser", {
         type: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -34,11 +34,11 @@ export const submitDelete = async function(email, pass) {
     })
 
     if(response) {
-        $('#pMessage').html(` !!! User successfully deleted.  !!!`);
+        $('#pMessage').html(messages.DeleteMessage1);
          //window.location.href = "index.html"; 
         }
     else {
-        $('#pMessage').html(` !!! Delete no successful. Please try again. !!!`);
+        $('#pMessage').html(messages.SignupMessage3);
         // window.location.href = "delete.html"; 
         }
 }

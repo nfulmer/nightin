@@ -11,11 +11,11 @@ const handleUpdate = function(e) {
 
     if ( email == "" || pass=="" )
     {
-        $('#pMessage').html('!!! Missing information, please fix and proceed. !!!');
+        $('#pMessage').html(messages.SignupMessage1);
     }
     else
     {
-        $('#pMessage').html('');
+        $('#pMessage').html(messages.EmptyString);
         submitUpdate(email, passold, passnew);
     }
   
@@ -28,7 +28,7 @@ export const submitUpdate = async function(email, passold, passnew) {
         passnew: passnew
     });
 
-    let response = await $.ajax("http://localhost:3000/updatepassword", {
+    let response = await $.ajax(appconfig.baseurl + "/updatepassword", {
         type: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -37,11 +37,11 @@ export const submitUpdate = async function(email, passold, passnew) {
     })
 
     if(response) {
-        $('#pMessage').html(' !!! Password updated successfully  !!!');   
+        $('#pMessage').html(messages.PasswordMessage1);   
         //window.location.href = "index.html"; 
     }
     else { 
-        $('#pMessage').html(' !!! Unable to update password. Please try again.  !!!');
+        $('#pMessage').html(messages.SignupMessage1);
             //window.location.href = "password.html";
     }
 }

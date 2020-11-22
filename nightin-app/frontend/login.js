@@ -1,7 +1,3 @@
-const UserMessage1 = "Enter your username and password.";
-const UserMessage2 = "User does not exist. Please sign up to continue.";
-const EmptyString="";
-
 $(function() {
     $('form').on("click", "#btnlogin", handleLoginSubmit);
     $('form').on("click", "#btnChangePassword", handleChangePassword);
@@ -15,11 +11,11 @@ const handleLoginSubmit = function(e) {
     var pass = $("#pass").val();
     if ( email == "" || pass=="" )
     {
-        $('#pMessage').html(UserMessage1);
+        $('#pMessage').html(messages.LoginMessage1);
     }
     else
     {
-        $('#pMessage').html(EmptyString);
+        $('#pMessage').html(messages.EmptyString);
         submitLogin(email, pass);
     }
   
@@ -31,7 +27,7 @@ export const submitLogin = async function(email, pass) {
         pass: pass
     });
 
-    let response = await $.ajax("http://localhost:3000/verifyuser", {
+    let response = await $.ajax(appconfig.baseurl + "/verifyuser", {
         type: "POST",
         dataType: "json",
         contentType: "application/json",
@@ -39,7 +35,7 @@ export const submitLogin = async function(email, pass) {
         data: data_string
     })
     if(response[0].name === 'NOT_FOUND') {
-         $('#pMessage').html(UserMessage2);
+         $('#pMessage').html(messages.LoginMessage2);
     }
     else { 
             //TO DO: create some sort of greeting for the user on index if there's a response
