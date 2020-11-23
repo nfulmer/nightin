@@ -28,9 +28,8 @@ export async function getSimilarMovies(movie_id){
 }
 
 export async function getPopularMovies(genres, page, overall_results){
-    //if (page ==)
     let base = base_url() + "movie/popular?" + api_key() + "&language=en-US&";
-    console.log(page);
+    //console.log(page);
     if (page == 1){
         base += "page=1";
     } else if (page > 100) {
@@ -63,9 +62,8 @@ export async function getPopularMovies(genres, page, overall_results){
 }
 
 export async function getRatedMovies(genres, page, overall_results){
-    //if (page ==)
     let base = base_url() + "movie/top_rated?" + api_key() + "&language=en-US&";
-    console.log(page);
+    //console.log(page);
     if (page == 1){
         base += "page=1";
     } else if (page > 100) {

@@ -1,7 +1,6 @@
 
 import {searchMovie,getPoster, getSimilarMovies, getPopularMovies, getRatedMovies} from "./js/tmdb.js";
 
-//TO-DO: make a generic movie item generating funnction?
 
 const buttons = () => {
     return ` <div id="buttons">
@@ -42,17 +41,14 @@ const movies = () => {
     return ["Star Trek", "Star Wars", "Skyfall", "Mission Impossible","The Godfather", "The Avengers", "Mean Girls", "Cruel Intentions", "Clueless", "Die Hard", "Titanic", "The Dark Knight", "Transformers", "Goodfellas", "Love Actually", "Inception", "The Shawshank Redemption", "Fast and Furious", "Juno", "Superbad", "Jumanji", "Borat", "High School Musical"]; 
 }
 
-let butCol = 0;
 
 $(function() {
-    //$('a').on("click", genRequest);
+
     $('form').on("click", genRequest);
     $('#reset').on("click", resetRequest);
-    //$('#submit').on("click", submitRequest);
     $('#similar').on("click", getSim);
     $('#rated').on("click", getRated);
     $('#popular').on("click", getPopular);
-    //$('.fav').on("click", storeMovieInfo);
     $('#movie_complete').on('input', debounce(handleInput, 400));
 });
 
@@ -97,10 +93,7 @@ function emptyList(){
 
 async function storeMovieInfo(evt){
     let idd;
-    console.log(evt.target);
-        
-    //console.log(evt.target.parentElement.className);
-    
+
     if (evt.target.className.includes("fa-heart")){
         idd = evt.target.parentElement.parentElement.id;
         evt.target.parentElement.className += " active";
@@ -108,7 +101,7 @@ async function storeMovieInfo(evt){
         idd = evt.target.parentElement.id;
         evt.target.className += " active";
     }
-    console.log(idd);
+
     let loginn = window.sessionStorage.getItem('login');
     let data_string = JSON.stringify({
         login: loginn,
@@ -136,10 +129,8 @@ async function getPopular(ev){
     }
     let results = await getPopularMovies(genres, 1, []);
 
-    // the title isn't showing up!
-    if (results === []){
-        let chan = document.getElementById("response-tit").textContent;
-        chan.textContent = "Sorry! No movies in the first 100 pages had that genre combination :(";
+    if (results === undefined || results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No popular movies had that genre combination :(";
     } else {
         genMovies(results);
     }
@@ -153,9 +144,9 @@ async function getRated(ev){
         genres.push(chosen_genres[i].id);
     }
     let results = await getRatedMovies(genres, 1, []);
-    console.log(results);
-    if (results === []){
-        document.getElementById("response-tit").textContent = "Sorry! No movies in the first 100 pages had that genre combination :(";
+    //console.log(results);
+    if (results === undefined || results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No top-rated movies had that genre combination :(";
     } else {
         genMovies(results);
     }
@@ -163,12 +154,10 @@ async function getRated(ev){
 
 // Handling front-end request bar
 function resetRequest(ev){
-    //ev.target.className += " active";
-    butCol = 0;
     $('#buttons').replaceWith(buttons());
     $('#movieresponse').replaceWith(emptyRes());
     $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
-    $("#request").text = '';
+    $("#movie_complete").textContent = '';
     $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
     $('#similar').on("click", getSim);
 };
@@ -180,13 +169,23 @@ function genRequest(ev, alt){
 //aesthetic documentation: https://getbootstrap.com/docs/4.0/components/list-group/ 
 
 async function getSim(even){
-    document.getElementById("response-tit").textContent = "Here are some movies you might like:";
     even.target.className += " active";
     let movie = document.getElementById("movie_complete").value.trim();
     let result = await searchMovie(movie);
-    let sim_result = await getSimilarMovies(result.results[0].id);
-    genMovies(sim_result.results);
+    //console.log(result);
+    if (result.results === undefined || result.results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
+    } else {
+        document.getElementById("response-tit").textContent = "Here are movies similar to " + result.results[0].original_title.trim() + ":";
+        let sim_result = await getSimilarMovies(result.results[0].id);
+
+        if (sim_result.results === undefined || sim_result.results.length === 0){
+            document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
+        } else {
+            genMovies(sim_result.results);
+        }
     
+}
 }
 
  function genFavBut(){
@@ -211,8 +210,6 @@ function genMovies(movies){
         } else {
             ap.className = "list-group-item";
         }
-        //ap.href = sim_results[i].href; //TO DO generate movie url
-
         let div1 = document.createElement('div')
         div1.className = "d-flex w-100 justify-content-between";
         let div2 = document.createElement('div');

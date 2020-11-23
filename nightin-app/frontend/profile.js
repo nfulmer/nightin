@@ -52,17 +52,13 @@ async function loadUser(user) {
     $divLoggedIn.append("Welcome " + user + "!");
     
     generateUserInfo();
-    //setTimeout(changeFocus, 1000);
 }
 
-function changeFocus(){
-    //window.location.href = "profile.html#userspecific";
-}
 
 async function generateUserInfo(){
 
     let loginn = window.sessionStorage.getItem('login');
-    console.log(loginn);
+    //console.log(loginn);
     let data_string = JSON.stringify({
         login: loginn
     });
@@ -85,8 +81,8 @@ async function generateUserInfo(){
     }).catch((error) => {
         console.error(error);
       });
-    console.log(responser);
-    console.log(responsem);
+    //console.log(responser);
+    //console.log(responsem);
     if(responsem[0].result === 'NO_FAVORITES'){
         const $divMov = $('#usermoviestit');
         $divMov.append("Head over to the movie page and start finding your favorites!");
@@ -132,7 +128,6 @@ async function generateUserInfo(){
     pimg.src = "./assets/img/bby.jpg";
     pimg.className = "rounded mx-auto d-block";
     $("#pizza_place").append(pimg);
-    //setTimeout(changeFocus, 2000);
 }
 
 function genMovies(movies){
@@ -174,5 +169,4 @@ function genMovies(movies){
         imp.append(ap);
     }
     document.getElementById("usermovies").replaceWith(imp);
-    changeFocus();
 }

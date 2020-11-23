@@ -40,6 +40,5 @@ export const submitDelete = async function(email, pass) {
         }
     else {
         $('#pMessage').html(messages.SignupMessage3);
-        // window.location.href = "delete.html"; 
         }
 }

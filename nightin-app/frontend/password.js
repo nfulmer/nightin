@@ -1,6 +1,5 @@
 $(function() {
     $('form').on("click", "#btnUpdatePassword", handleUpdate);
-   // $('form').on("focus", "#email", handleEmailfocus);
    $('#email').val(window.sessionStorage.getItem('login'));
 });
 
@@ -39,11 +38,9 @@ export const submitUpdate = async function(email, passold, passnew) {
 
     if(response) {
         $('#pMessage').html(messages.PasswordMessage1);   
-        //window.location.href = "index.html"; 
     }
     else { 
         $('#pMessage').html(messages.SignupMessage3);
-            //window.location.href = "password.html";
     }
 }
 

@@ -32,7 +32,7 @@ export async function makeRequest(ingredients, searchTerm){
             }
         }
     }
-    console.log(base);
+    //console.log(base);
     return await( await fetch(base, defaultReq())).json();
 }
   

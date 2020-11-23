@@ -36,10 +36,9 @@ export const submitLogin = async function(email, pass) {
          $('#pMessage').html(messages.LoginMessage2);
     }
     else { 
-            //TO DO: create some sort of greeting for the user on index if there's a response
         window.sessionStorage.setItem('name', response[0].name);
         window.sessionStorage.setItem('login', response[0].login);
-        window.location.href = "index.html";  
+        window.location.href = "profile.html";  
     }
 }
 
