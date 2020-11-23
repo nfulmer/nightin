@@ -38,6 +38,10 @@ const emptyRes = () => {
 </section>`;
 }
 
+const movies = () => {
+    return ["Star Trek", "Star Wars", "Skyfall", "Mission Impossible","The Godfather", "The Avengers", "Mean Girls", "Cruel Intentions", "Clueless", "Die Hard", "Titanic", "The Dark Knight", "Transformers", "Goodfellas", "Love Actually", "Inception", "The Shawshank Redemption", "Fast and Furious", "Juno", "Superbad", "Jumanji", "Borat", "High School Musical"]; 
+}
+
 let butCol = 0;
 
 $(function() {
@@ -46,15 +50,50 @@ $(function() {
     $('#reset').on("click", resetRequest);
     //$('#submit').on("click", submitRequest);
     $('#similar').on("click", getSim);
-    // $('input').keypress(function(ev){
-    //     if (ev.keyCode === 13){
-    //         addBut(ev);
-    //     }
-    // });
     $('#rated').on("click", getRated);
     $('#popular').on("click", getPopular);
     //$('.fav').on("click", storeMovieInfo);
+    $('#movie_complete').on('input', debounce(handleInput, 400));
 });
+
+function debounce(func, wait){
+    let timeout;
+    return function(...args){
+        const context = this;
+        const executor = function(){
+            timeout = null;
+            func.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(executor, wait);
+    }
+}
+
+function handleInput(even){
+    const inputData = even.target.value;
+    let compl_res = movies().filter(foo => foo.slice(0,inputData.length) === inputData);
+    let a = document.createElement("div");
+    a.id = "autocomplete-list";
+    a.className = "autocomplete-items";
+    document.getElementById('autocomplete-list').replaceWith(a);
+    let b;
+    for (let i = 0; i<compl_res.length; i++){
+        b = document.createElement("div");
+        b.innerText = compl_res[i];
+        b.addEventListener('click', function(e){
+            document.getElementById("movie_complete").value = e.target.innerText;
+            emptyList();
+        });
+        a.append(b);
+    }
+}
+
+function emptyList(){
+    let a = document.createElement("div");
+    a.id = "autocomplete-list";
+    a.className = "autocomplete-items";
+    document.getElementById('autocomplete-list').replaceWith(a);
+}
 
 async function storeMovieInfo(evt){
     let idd;
@@ -131,6 +170,7 @@ function resetRequest(ev){
     $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
     $("#request").text = '';
     $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
+    $('#similar').on("click", getSim);
 };
 
 function genRequest(ev, alt){
@@ -142,7 +182,7 @@ function genRequest(ev, alt){
 async function getSim(even){
     document.getElementById("response-tit").textContent = "Here are some movies you might like:";
     even.target.className += " active";
-    let movie = document.getElementById("request").value.trim();
+    let movie = document.getElementById("movie_complete").value.trim();
     let result = await searchMovie(movie);
     let sim_result = await getSimilarMovies(result.results[0].id);
     genMovies(sim_result.results);

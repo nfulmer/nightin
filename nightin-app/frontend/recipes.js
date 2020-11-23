@@ -1,10 +1,6 @@
 import {makeRequest} from "./js/puppy.js";
 import {searchMovie, getPoster} from "./js/tmdb.js";
-
- // TO DO: see more results from search
  
-
- //TO DO: need to build this is not html
 const buttons = () => {
     return `<div id="buttons">
     <button type="button" class="btn btn-outline-primary">Onion</button>
@@ -20,14 +16,14 @@ const emptyRes = () => {
 }
 const emptyReq = () => {
     return `<div id="response-container">
-    <h3 class="text-muted" id="reponse-tit"></h3>
+    <h3 class="text-muted" id="response-tit"></h3>
     <div class="list-group" id="response">
     </div>
     </div>`;
 }
 
 const food = () => {
-    return ["Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana", "Grapes", "Cilantro", "Jalapenos" ,"Strawberries", "Coffee", "Salmon", "Tuna", "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Marshmellow", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball",  "Chili", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
+    return ["Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana", "Grapes", "Cilantro", "Jalapenos" ,"Strawberries", "Coffee", "Salmon", "Tuna", "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball",  "Chili", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
 }
 
 let butCol = 0;
@@ -72,10 +68,6 @@ function handleInput(even){
     for (let i = 0; i<compl_res.length; i++){
         b = document.createElement("div");
         b.innerText = compl_res[i];
-        // let bb = document.createElement('input');
-        // bb.type = "hidden";
-        // bb.value = compl_res[i];
-        // b.append(bb);
         b.addEventListener('click', function(e){
             document.getElementById("food_complete").value = e.target.innerText;
             emptyList();
@@ -93,7 +85,6 @@ function emptyList(){
 
 function addBut(event){
     let newBut = document.createElement("button");
-    //newBut.type = "button";
     let color; 
     console.log(butCol);
     if (butCol === 0) color = "primary"
@@ -114,7 +105,6 @@ function addBut(event){
     
     genRequest(null, event.target.value);
     event.target.value = "";
-    //TO DO: dif colors
 }
 
 
@@ -123,6 +113,7 @@ function resetRequest(ev){
     //ev.target.className += " active";
     document.getElementById("request").textContent = "";
     butCol = 0;
+    $("#submit").replaceWith(`<button type="button" class="btn btn-outline-danger" id="submit">Submit</button>`);
 
     $("#response-container").replaceWith(emptyReq());
     //$butDiv.replaceWith(emptyReq());
@@ -131,8 +122,8 @@ function resetRequest(ev){
     $("#response_movie").replaceWith(emptyRes());
     //TO DO: reset buttons
     $("#match").replaceWith(`<button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>`);
-    $("#submit").replaceWith(`<button type="button" class="btn btn-outline-danger" id="submit">Submit</button>`);
-    $("#submit").addEventListener("click", submitRequest);
+    $("#match").on("click", genMatch);
+    $("#submit").on("click", submitRequest);
 };
 
 function genRequest(ev, alt){
@@ -141,13 +132,7 @@ function genRequest(ev, alt){
         req = alt;
     } else {
         req = ev.target.textContent;
-        //ev.target.className += " disabled";
         ev.target.className += " active";
-        //ev.target.off("click");
-        // TO DO: make this work
-        //ev.target.off("click", genRequest);
-        
-        //ev.target.attr("disabled", "disabled");
     }
     let ideal = document.getElementById("request").textContent.trim();
     if (ideal === ""){
@@ -158,14 +143,27 @@ function genRequest(ev, alt){
     
   };
 
-  function genFavBut(){
+  function genFavBut(movie){
     let but = document.createElement("button");
-    but.className = "btn btn-outline-danger fav";
-    but.addEventListener("click", storeRecipeInfo);
+    if (movie){
+        but.className = "btn btn-outline-danger fav movie";
+    } else {
+        but.className = "btn btn-outline-danger fav recipe";
+    }
+    but.addEventListener("click", like);
     let ii = document.createElement("i");
     ii.className = "fa fa-heart";
     but.append(ii);
     return but;
+ }
+
+ async function like(evt){
+     evt.preventDefault();
+     if (evt.target.className.includes("movie") || evt.target.parentElement.className.includes("movie")){
+         storeMovieInfo(evt);
+     } else {
+        storeRecipeInfo(evt);
+     }
  }
 
  async function storeRecipeInfo(evt){
@@ -173,8 +171,6 @@ function genRequest(ev, alt){
      let titlee;
      let linkk;
     console.log(evt.target);
-        
-    //console.log(evt.target.parentElement.className);
     
     if (evt.target.className.includes("fa-heart")){
         titlee = evt.target.parentElement.parentElement.textContent;
@@ -198,13 +194,46 @@ function genRequest(ev, alt){
         contentType: "application/json",
         json: true,
         data: data_string
-    });
+    }).catch((error) => {console.log(error)});
 
     if(response[0].result === 'UPDATE_SUCCESS') {
         
      }
 
  }
+
+ async function storeMovieInfo(evt){
+    let idd;
+    console.log(evt.target);
+        
+    //console.log(evt.target.parentElement.className);
+    
+    if (evt.target.className.includes("fa-heart")){
+        idd = evt.target.parentElement.parentElement.id;
+        evt.target.parentElement.className += " active";
+    } else {
+        idd = evt.target.parentElement.id;
+        evt.target.className += " active";
+    }
+    console.log(idd);
+    let loginn = window.sessionStorage.getItem('login');
+    let data_string = JSON.stringify({
+        login: loginn,
+        id: idd
+    });
+
+    let response = await $.ajax(appconfig.baseurl + "/addmovie", {
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        json: true,
+        data: data_string
+    });
+
+    if(response[0].result === 'UPDATE_SUCCESS') {
+        
+     }
+}
 
 // 
 async function submitRequest(ev){
@@ -235,7 +264,7 @@ async function submitRequest(ev){
         img.src = results[i].thumbnail;
         img.className = "img-thumbnail rounded float-right";
         ap.append(img);
-        ap.append(genFavBut());
+        ap.append(genFavBut(false));
         imp.append(ap);
     }
     document.getElementById("response").replaceWith(imp);
@@ -244,10 +273,14 @@ async function submitRequest(ev){
 async function genMatch(ev){
     ev.target.className += " active";
     let st = document.getElementById("request").textContent.split(",");
+    console.log(st);
     //console.log(st);
     let results = (await searchMovie(st[0])).results;
     console.log(results);
-    let imp = document.createElement('div');
+    if (results.length === 0){
+        document.getElementById("response_movie").textContent = "Sorry! No movie match for that request :(";
+    } else {
+        let imp = document.createElement('div');
     imp.className = "list-group";
     imp.id = "response_movie";
     for (let i = 0; i<results.length; i++){
@@ -262,6 +295,7 @@ async function genMatch(ev){
         let div1 = document.createElement('div')
         div1.className = "d-flex w-100 justify-content-between";
         let div2 = document.createElement('div');
+        div2.id = results[i].id;
         let h = document.createElement("h3");
         h.textContent = results[i].original_title.trim();
         h.className = "mb-1";
@@ -276,10 +310,14 @@ async function genMatch(ev){
         img.className = "img-thumbnail rounded float-right";
         div2.append(h);
         div2.append(p);
+        div2.append(genFavBut(true));
         div1.append(div2);
         div1.append(img);
         ap.append(div1);
         imp.append(ap);
     }
     document.getElementById("response_movie").replaceWith(imp);
+
+    }
+    
 }
