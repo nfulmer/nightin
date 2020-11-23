@@ -9,7 +9,7 @@ const handleUpdate = function(e) {
     var passold = $("#passold").val();
     var passnew = $("#passnew").val();
 
-    if ( email == "" || pass=="" )
+    if ( email == "" || passold=="" || passnew=="")
     {
         $('#pMessage').html(messages.SignupMessage1);
     }
@@ -41,7 +41,7 @@ export const submitUpdate = async function(email, passold, passnew) {
         //window.location.href = "index.html"; 
     }
     else { 
-        $('#pMessage').html(messages.SignupMessage1);
+        $('#pMessage').html(messages.SignupMessage3);
             //window.location.href = "password.html";
     }
 }

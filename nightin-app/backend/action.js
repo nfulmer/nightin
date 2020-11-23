@@ -35,18 +35,16 @@ exports.updatepassword = (req, res) => {
     var updateString = "UPDATE user SET pass='" + req.body.passnew + "' WHERE login = '" + req.body.email + "' AND pass = '" + req.body.passold + "';";
     console.log(updateString);
     connection.query(updateString, function(err, results) {
-        var string = JSON.stringify(results);
-        if(string === '[]') { res.json(false); }
-        else { res.json(true); }
+        if(results.affectedRows == 1) { res.json(true); }
+        else { res.json(false); }
     });
 };
 
 exports.deleteuser = (req, res) => {
     var deleteString = "DELETE FROM user WHERE login = '" + req.body.email + "' AND pass = '" + req.body.pass + "';";
     connection.query(deleteString, function(err, results) {
-        var string = JSON.stringify(results);
-        if(string === '[]') { res.json(false); }
-        else { res.json(true); }
+        if(results.affectedRows == 1) { res.json(true); }
+        else { res.json(false); }
     });
 };
 
@@ -97,4 +95,13 @@ exports.getrecipes = (req, res) => {
         else{
             res.json(string);
         }});
+};
+
+exports.getuserprofile = (req, res) => {
+    var selectString = "SELECT firstname, lastname, login FROM user WHERE login = '" + req.body.email +  "';";
+    connection.query(selectString, function(err, results) {
+        console.log(results);
+        var string = JSON.stringify(results);
+        if(string === '[]') { res.json([{name:'NOT_FOUND'}]); }
+        else { res.json(results);  }});
 };

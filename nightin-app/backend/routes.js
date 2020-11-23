@@ -22,6 +22,14 @@ router.get('/login', (req, res) => {
     res.sendFile('login.html', {'root': __dirname + '/../frontend'});
 });
 
+router.get('/logout', (req, res) => {
+    res.sendFile('logout.html', {'root': __dirname + '/../frontend'});
+});
+
+router.get('/profile', (req, res) => {
+    res.sendFile('profile.html', {'root': __dirname + '/../frontend'});
+});
+
 router.get('/signup', (req, res) => {
     res.sendFile('signup.html', {'root': __dirname + '/../frontend'});
 });
@@ -38,5 +46,6 @@ router.post('/addmovie', action.addMovie);
 router.post('/getmovies', action.getmovies);
 router.post('/addrecipe', action.addrecipe);
 router.post('/getrecipes', action.getrecipes);
+router.post('/getuserprofile', action.getuserprofile);
 
 module.exports = router;

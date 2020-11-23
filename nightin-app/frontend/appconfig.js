@@ -18,5 +18,3 @@ const messages = {
 
     "PasswordMessage1": "Password successfully changed."
 }
-
-//module.exports = appconfig;

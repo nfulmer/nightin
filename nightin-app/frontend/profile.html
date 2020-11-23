@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Night-In</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/heading.css">
+        <link rel="stylesheet" href="css/body.css">
+        <script src="profile.js" type = "module"></script>
+        <script src="header.js" type="module"></script>  
+        <script src="appconfig.js"></script>
+    </head>
+
+    <body id="page-top">
+        <div id="divroot"></div>
+    <br>
+    <section class="page-section" id="login">
+        <div class="container" id="contain">
+            <div id="loggedinuser" class="text-info  text-right h6"></div>
+            <div id="divMessage" class="text-success text-center h6"><p id="pMessage"></p></div>
+            <div class="d-flex flex-column align-items-center">
+                <!-- <div class="page-section-heading text-secondary d-inline-block mb-0">Log In</div>-->
+                 <form>
+                     <label for="email">*Email:</label>
+                     <input type="text" class="form-control" id="email" name="email"><br>
+                     <label for="password">*Password:</label>
+                     <input type="password"  class="form-control" id="pass" name="pass"><br>
+                     <br><br>
+                     <input  class="btn btn-outline-danger" type="submit" id="btnChangePassword" value="Change Password"> 
+                     <input  class="btn btn-outline-danger" type="submit" id="btnDeleteAccount" value="Delete Account"> 
+                     
+                </form>
+             </div>
+        </div>
+        <br>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </body>
+
+</html>

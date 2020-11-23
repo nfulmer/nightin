@@ -24,14 +24,16 @@
                     <div class="d-flex flex-column align-items-center">
                        <!-- <div class="page-section-heading text-secondary d-inline-block mb-0">Log In</div>-->
                         <form>
-                            <label for="email">Email:</label>
-                            <input type="text"  class="form-control" id="email" name="email"><br>
-                            <label for="password">Password:</label>
+                            <label for="email">*Email:</label>
+                            <input type="text" class="form-control" id="email" name="email"><br>
+                            <label for="password">*Password:</label>
                             <input type="password"  class="form-control" id="pass" name="pass"><br>
-                            <input  class="btn btn-outline-danger" type="submit" id="btnlogin" value="Login"> <br><br>
-                            <input  class="btn btn-outline-danger" type="submit" id="btnChangePassword" value="Change Password"> 
-                            <input  class="btn btn-outline-danger" type="submit" id="btnDeleteAccount" value="Delete Account"> 
-         
+                            <input  class="btn btn-outline-danger" type="submit" id="btnlogin" value="Login">
+                            <input  class="btn btn-outline-danger" type="submit" id="btnsignup" value="Sign Up">
+                            <br><br>
+                            <input  class="btn btn-outline-danger" type="submit" hidden=true id="btnChangePassword" value="Change Password"> 
+                            <input  class="btn btn-outline-danger" type="submit" hidden=true id="btnDeleteAccount" value="Delete Account"> 
+                            
                        </form>
                     </div>
         

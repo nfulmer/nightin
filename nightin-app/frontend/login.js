@@ -2,7 +2,7 @@ $(function() {
     $('form').on("click", "#btnlogin", handleLoginSubmit);
     $('form').on("click", "#btnChangePassword", handleChangePassword);
     $('form').on("click", "#btnDeleteAccount", handleDeleteAccount);
-    
+    $('form').on("click", "#btnsignup", handleSignUp);
 });
 
 const handleLoginSubmit = function(e) {
@@ -53,4 +53,9 @@ const handleChangePassword = function(e) {
 const handleDeleteAccount = function(e) {
     e.preventDefault();
     window.location.href = "delete.html";
+}
+
+const handleSignUp = function(e) {
+    e.preventDefault();
+    window.location.href = "signup.html";
 }
