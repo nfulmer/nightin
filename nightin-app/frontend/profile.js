@@ -10,6 +10,7 @@ $(function() {
     }
 });
 
+// gets the user-specific login info to search the movie and recipe tables on
 function profile(){
     let login = window.sessionStorage.getItem('login');
     getProfile(login);
@@ -54,7 +55,8 @@ async function loadUser(user) {
     generateUserInfo();
 }
 
-
+// searches both the recipe and movie tables for the logged-in user's 'favorites'
+// for the movie's ids, it will make the tmdb calls to get the needed JSON object
 async function generateUserInfo(){
 
     let loginn = window.sessionStorage.getItem('login');
@@ -130,6 +132,7 @@ async function generateUserInfo(){
     $("#pizza_place").append(pimg);
 }
 
+// expects an array of JSON movie objects and creates the visual objects from that
 function genMovies(movies){
     let imp = document.createElement('div');
     imp.className = "list-group";

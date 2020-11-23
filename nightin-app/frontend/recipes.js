@@ -1,6 +1,10 @@
 import {makeRequest} from "./js/puppy.js";
 import {searchMovie, getPoster} from "./js/tmdb.js";
  
+/**
+ * Generates the non-selected ingredient buttons for reset
+ * @constant
+ */
 const buttons = () => {
     return `<div id="buttons">
     <button type="button" class="btn btn-outline-primary">Onion</button>
@@ -11,9 +15,19 @@ const buttons = () => {
     <button type="button" class="btn btn-outline-danger">Yogurt</button>
     </div>`;
 }
+
+/**
+ * Generates the empty movie response section for reset
+ * @constant
+ */
 const emptyRes = () => {
     return `<div id="response_movie"></div>`;  
 }
+
+/**
+ * Generates the empty recipe response section for reset
+ * @constant
+ */
 const emptyReq = () => {
     return `<div id="response-container">
     <h3 class="text-muted" id="response-tit"></h3>
@@ -22,10 +36,15 @@ const emptyReq = () => {
     </div>`;
 }
 
+/**
+ * The ingredients used for autocomplete
+ * @constant
+ */
 const food = () => {
     return ["Chocolate", "Milk", "Cabbage", "Kiwi", "Garlic", "Lemon", "Cashews", "Peanuts", "Pineapple", "Apple", "Celery", "Oats", "Mustard", "Tofu", "Beef", "Pork", "Cauliflower", "Broccoli", "Chickpeas", "Cumin", "Lime", "Orange", "Banana",  "Cilantro" ,"Strawberries", "Coffee", "Salmon",  "Peas", "Cucumber", "Carrots", "Lettuce", "Tomato", "Bacon", "Turkey", "Artichoke", "Blackberry", "Fig", "Potato", "Flour", "Mango", "Lentils", "Olive", "Avocado", "Corn", "Pistachio", "Apricot", "Cherry", "Almond", "Peach", "Pear", "Pomegranate", "Spinach", "Vanilla", "Rice", "Pasta", "Biscuit", "Sourdough", "Squash", "Crab", "Tuna", "Salmon", "Siracha", "Okra", "Quinoa", "Scallop", "Lamb", "Mayonnaise", "Mushroom", "Edamame", "Cheese", "Eggs", "Honey", "Butter", "Sausage", "Meatball",  "Chili", "Hummus", "Zucchini", "Melon", "Honeydew", "Watermelon"]; 
 }
 
+// variable used to make added ingredient buttons different colors
 let butCol = 0;
 
 $(function() {
@@ -41,9 +60,41 @@ $(function() {
     $('#food_complete').on('input', debounce(handleInput, 400));
 });
 
-// https://medium.com/@ipraveen/dissecting-the-debounce-f6b12ea7265a
-// debounce for autocomplete
+function resetRequest(ev){
+    document.getElementById("request").textContent = "";
+    butCol = 0;
+    $("#submit").replaceWith(`<button type="button" class="btn btn-outline-danger" id="submit">Submit</button>`);
+    $("#response-container").replaceWith(emptyReq());
+    $("#buttons").replaceWith(buttons());
+    $("#response_movie").replaceWith(emptyRes());
+    $("#match").replaceWith(`<button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>`);
+    $("#match").on("click", genMatch);
+    $("#submit").on("click", submitRequest);
+};
 
+// changes button to selected when button clicked 
+// alt input if for the 'addBut' function so that user-entered ingredients are automatically selected
+function genRequest(ev, alt){
+    let req;
+    if (ev === null){
+        req = alt;
+    } else {
+        req = ev.target.textContent;
+        ev.target.className += " active";
+    }
+    let ideal = document.getElementById("request").textContent.trim();
+    if (ideal === ""){
+        document.getElementById("request").textContent = req;
+    } else {
+        document.getElementById("request").textContent += ", " + req;
+    }
+  };
+
+/**
+ * The next three functions deal with the autocomplete on the movies
+ * 
+ * Function 1: the debounce function that takes in the fuction to execute and wait time
+ */
 function debounce(func, wait){
     let timeout;
     return function(...args){
@@ -57,6 +108,9 @@ function debounce(func, wait){
     }
 }
 
+/**
+ * Function 2: filters the ingredients array based on entered letters and updates the drop down list
+ */
 function handleInput(even){
     const inputData = even.target.value;
     let compl_res = food().filter(foo => foo.slice(0,inputData.length) === inputData);
@@ -76,6 +130,9 @@ function handleInput(even){
     }
 }
 
+/**
+ * Function 3: closes the drop down list when an option is selected
+ */
 function emptyList(){
     let a = document.createElement("div");
     a.id = "autocomplete-list";
@@ -83,6 +140,8 @@ function emptyList(){
     document.getElementById('autocomplete-list').replaceWith(a);
 }
 
+// generates a selected ingredient button when someone hits enter from the 
+// ingredient input bar
 function addBut(event){
     let newBut = document.createElement("button");
     let color; 
@@ -107,37 +166,9 @@ function addBut(event){
     event.target.value = "";
 }
 
-
-function resetRequest(ev){
-    document.getElementById("request").textContent = "";
-    butCol = 0;
-    $("#submit").replaceWith(`<button type="button" class="btn btn-outline-danger" id="submit">Submit</button>`);
-    $("#response-container").replaceWith(emptyReq());
-    $("#buttons").replaceWith(buttons());
-    $("#response_movie").replaceWith(emptyRes());
-    $("#match").replaceWith(`<button type="button" class="btn btn-outline-danger" id="match">Get my food-movie match!</button>`);
-    $("#match").on("click", genMatch);
-    $("#submit").on("click", submitRequest);
-};
-
-function genRequest(ev, alt){
-    let req;
-    if (ev === null){
-        req = alt;
-    } else {
-        req = ev.target.textContent;
-        ev.target.className += " active";
-    }
-    let ideal = document.getElementById("request").textContent.trim();
-    if (ideal === ""){
-        document.getElementById("request").textContent = req;
-    } else {
-        document.getElementById("request").textContent += ", " + req;
-    }
-    
-  };
-
-  function genFavBut(movie){
+// adds the favoriting button to both the movies and the recipes
+// 'movie' input is true/false and distinguishes the movie from the recipe favorites
+function genFavBut(movie){
     let but = document.createElement("button");
     if (movie){
         but.className = "btn btn-outline-danger fav movie";
@@ -151,6 +182,7 @@ function genRequest(ev, alt){
     return but;
  }
 
+ // distinguishes between whether a movie is being liked or a recipe is being liked and delegates based on that
  async function like(evt){
      evt.preventDefault();
      if (evt.target.className.includes("movie") || evt.target.parentElement.className.includes("movie")){
@@ -160,6 +192,7 @@ function genRequest(ev, alt){
      }
  }
 
+ // stores the title and link to liked recipe for the user logged in
  async function storeRecipeInfo(evt){
      evt.preventDefault();
      let titlee;
@@ -196,6 +229,7 @@ function genRequest(ev, alt){
 
  }
 
+ // stores the movie id for the logged in user as favorite
  async function storeMovieInfo(evt){
     let idd;
     //console.log(evt.target);
@@ -227,6 +261,7 @@ function genRequest(ev, alt){
      }
 }
 
+// does the recipe match based on the ingredient request from our RecipePuppy functions
 async function submitRequest(ev){
     ev.target.className += " active";
     let ingrs = document.getElementById("request").textContent.trim().split(", ");
@@ -265,6 +300,7 @@ async function submitRequest(ev){
     }
 }
 
+// does a search for movies based on the first ingredient name using our tmdb functions
 async function genMatch(ev){
     ev.target.className += " active";
     let st = document.getElementById("request").textContent.split(",");
