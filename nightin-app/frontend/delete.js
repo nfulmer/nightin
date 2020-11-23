@@ -1,5 +1,6 @@
 $(function() {
     $('form').on("click", "#btnDeleteAccount", handleDelete);
+    $('#email').val(window.sessionStorage.getItem('login'));
 });
 
 const handleDelete = function(e) {
@@ -35,7 +36,7 @@ export const submitDelete = async function(email, pass) {
 
     if(response) {
         $('#pMessage').html(messages.DeleteMessage1);
-         //window.location.href = "index.html"; 
+         window.location.href = "logout.html"; 
         }
     else {
         $('#pMessage').html(messages.SignupMessage3);

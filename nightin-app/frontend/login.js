@@ -1,7 +1,5 @@
 $(function() {
     $('form').on("click", "#btnlogin", handleLoginSubmit);
-    $('form').on("click", "#btnChangePassword", handleChangePassword);
-    $('form').on("click", "#btnDeleteAccount", handleDeleteAccount);
     $('form').on("click", "#btnsignup", handleSignUp);
 });
 
@@ -43,16 +41,6 @@ export const submitLogin = async function(email, pass) {
         window.sessionStorage.setItem('login', response[0].login);
         window.location.href = "index.html";  
     }
-}
-
-const handleChangePassword = function(e) {
-    e.preventDefault();
-    window.location.href = "password.html";
-}
-
-const handleDeleteAccount = function(e) {
-    e.preventDefault();
-    window.location.href = "delete.html";
 }
 
 const handleSignUp = function(e) {

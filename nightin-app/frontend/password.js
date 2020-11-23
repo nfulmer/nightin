@@ -1,6 +1,7 @@
 $(function() {
     $('form').on("click", "#btnUpdatePassword", handleUpdate);
    // $('form').on("focus", "#email", handleEmailfocus);
+   $('#email').val(window.sessionStorage.getItem('login'));
 });
 
 const handleUpdate = function(e) {

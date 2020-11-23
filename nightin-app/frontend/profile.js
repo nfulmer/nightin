@@ -1,15 +1,17 @@
 $(function() {
     $('form').on("click",profile());
+    $('form').on("click", "#btnChangePassword", handleChangePassword);
+    $('form').on("click", "#btnDeleteAccount", handleDeleteAccount);
 });
 
 function profile(){
-    let logginname = window.sessionStorage.getItem('name');
-    getProfile(logginname);
+    let login = window.sessionStorage.getItem('login');
+    getProfile(login);
 }
 
-export const getProfile = async function(logginname) {
+export const getProfile = async function(login) {
     let data_string = JSON.stringify({
-        email: logginname
+        email: login
     });
 
     let response = await $.ajax(appconfig.baseurl + "/getuserprofile", {
@@ -23,6 +25,18 @@ export const getProfile = async function(logginname) {
          $('#pMessage').html(messages.LoginMessage2);
     }
     else { 
-
+        $('#fname').val(response[0].firstname);
+        $('#lname').val(response[0].lastname);
+        $('#email').val(response[0].login);
     }
+}
+
+const handleChangePassword = function(e) {
+    e.preventDefault();
+    window.location.href = "password.html";
+}
+
+const handleDeleteAccount = function(e) {
+    e.preventDefault();
+    window.location.href = "delete.html";
 }
