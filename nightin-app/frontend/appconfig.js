@@ -1,6 +1,6 @@
 const appconfig = { 
-    "baseurl": "http://localhost:8080"
-    // "baseurl": "https://niapp-426.herokuapp.com"
+    // "baseurl": "http://localhost:8080"
+    "baseurl": "https://niapp-426.herokuapp.com"
 }
 
 // error messages for signup, login, change password, and delete account
