@@ -1,7 +1,10 @@
-
 import {searchMovie,getPoster, getSimilarMovies, getPopularMovies, getRatedMovies} from "./js/tmdb.js";
 
-
+/**
+ * Generates the non-selected genre buttons for reset
+ * id's are the tmdb-specific ids for each genre
+ * @constant
+ */
 const buttons = () => {
     return ` <div id="buttons">
     <button type="button" class="btn btn-outline-primary" id="28">Action</button>
@@ -25,25 +28,30 @@ const buttons = () => {
 </div>`;
 }
 
+/**
+ * Generates the empty movie response section for reset
+ * @constant
+ */
 const emptyRes = () => {
     return `<section id="movieresponse">
     <br><br> <br>
     <h3 class="text-muted" id="response-tit"></h3>
     <br>
     <div class="list-group" id="response">
-
     </div>
-
 </section>`;
 }
 
+/**
+ * The movies used for autocomplete
+ * @constant
+ */
 const movies = () => {
-    return ["Star Trek", "Star Wars", "Skyfall", "Mission Impossible","The Godfather", "The Avengers", "Mean Girls", "Cruel Intentions", "Clueless", "Die Hard", "Titanic", "The Dark Knight", "Transformers", "Goodfellas", "Love Actually", "Inception", "The Shawshank Redemption", "Fast and Furious", "Juno", "Superbad", "Jumanji", "Borat", "High School Musical"]; 
+    return ["Aladdin", "Edward Scissorhands", "Jurassic Park", "Beetlejuice", "Lord of the Rings", "Spirited Away", "Pulp Fiction", "The Shining", "Rocky", "Fight Club", "Goldfinger", "Harry Potter", "Psycho", "Indiana Jones", "Alien", "Princess Bride", "Jaws", "Star Trek", "Star Wars", "Skyfall", "Mission Impossible","The Godfather", "The Avengers", "Mean Girls", "Cruel Intentions", "Clueless", "Die Hard", "Titanic", "The Dark Knight", "Transformers", "Goodfellas", "Love Actually", "Inception", "The Shawshank Redemption", "Fast and Furious", "Juno", "Superbad", "Jumanji", "Borat", "High School Musical"]; 
 }
 
 
 $(function() {
-
     $('form').on("click", genRequest);
     $('#reset').on("click", resetRequest);
     $('#similar').on("click", getSim);
@@ -52,6 +60,27 @@ $(function() {
     $('#movie_complete').on('input', debounce(handleInput, 400));
 });
 
+
+function resetRequest(ev){
+    $('#buttons').replaceWith(buttons());
+    $('#movieresponse').replaceWith(emptyRes());
+    $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
+    $("#movie_complete").replaceWith(`<input type="text" class="form-control" id="movie_complete" placeholder="Enter your favorite movie here">`);
+    $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
+    $('#similar').on("click", getSim);
+    $("#movie_complete").on('input', debounce(handleInput, 400));
+};
+
+// changes genre buttons to active when selected
+function genRequest(ev){
+    ev.target.className += " active";
+}
+
+/**
+ * The next three functions deal with the autocomplete on the movies
+ * 
+ * Function 1: the debounce function that takes in the fuction to execute and wait time
+ */
 function debounce(func, wait){
     let timeout;
     return function(...args){
@@ -65,6 +94,9 @@ function debounce(func, wait){
     }
 }
 
+/**
+ * Function 2: filters the movie array based on entered letters and updates the drop down list
+ */
 function handleInput(even){
     const inputData = even.target.value;
     let compl_res = movies().filter(foo => foo.slice(0,inputData.length) === inputData);
@@ -84,6 +116,9 @@ function handleInput(even){
     }
 }
 
+/**
+ * Function 3: closes the drop down list when an object is selected
+ */
 function emptyList(){
     let a = document.createElement("div");
     a.id = "autocomplete-list";
@@ -91,7 +126,85 @@ function emptyList(){
     document.getElementById('autocomplete-list').replaceWith(a);
 }
 
-async function storeMovieInfo(evt){
+
+/**
+ * The next three functions deal with the various searching options
+ * 
+ * Function 1: searches popular movies based on selected genre buttons
+ */
+async function getPopular(ev){
+    let chosen_genres = document.getElementsByClassName("active");
+    let genres = [];
+    for (let i = 0; i<chosen_genres.length; i++){
+        genres.push(chosen_genres[i].id);
+    }
+    let results = await getPopularMovies(genres, 1, []);
+
+    if (results === undefined || results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No popular movies had that genre combination :(";
+    } else {
+        genMovies(results);
+    }
+    
+}
+
+/**
+ * Function 2: searches top-rated movies based on selected genre buttons
+ */
+async function getRated(ev){
+    let chosen_genres = document.getElementsByClassName("active");
+    let genres = [];
+    for (let i = 0; i<chosen_genres.length; i++){
+        genres.push(chosen_genres[i].id);
+    }
+    let results = await getRatedMovies(genres, 1, []);
+    //console.log(results);
+    if (results === undefined || results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No top-rated movies had that genre combination :(";
+    } else {
+        document.getElementById("response-tit").textContent = "Here are some movies you might like:";
+        genMovies(results);
+    }
+}
+
+/**
+ * Function 3: first searches for movie title based on input (to get the imdb id)
+ * then uses the tmdb id to get similar movies
+ */
+async function getSim(even){
+    even.target.className += " active";
+    let movie = document.getElementById("movie_complete").value.trim();
+    let result = await searchMovie(movie);
+    //console.log(result);
+    if (result.results === undefined || result.results.length === 0){
+        document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
+    } else {
+        document.getElementById("response-tit").textContent = "Here are movies similar to " + result.results[0].original_title.trim() + ":";
+        let sim_result = await getSimilarMovies(result.results[0].id);
+
+        if (sim_result.results === undefined || sim_result.results.length === 0){
+            document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
+        } else {
+            document.getElementById("response-tit").textContent = "Here are some movies you might like:";
+            genMovies(sim_result.results);
+        }
+    }   
+}
+
+// creates the favoriting heart button and it's associated listener function
+ function genFavBut(){
+    let but = document.createElement("button");
+    but.className = "btn btn-outline-danger fav";
+    but.addEventListener("click", storeMovieInfo);
+    let ii = document.createElement("i");
+    ii.className = "fa fa-heart";
+    but.append(ii);
+    return but;
+ }
+
+ // stores movie id and the login information in the 'movies' table at the backend when heart button clicked
+ // favorited movies are accesible from the user's profile page
+ async function storeMovieInfo(evt){
     let idd;
 
     if (evt.target.className.includes("fa-heart")){
@@ -121,83 +234,8 @@ async function storeMovieInfo(evt){
      }
 }
 
-async function getPopular(ev){
-    let chosen_genres = document.getElementsByClassName("active");
-    let genres = [];
-    for (let i = 0; i<chosen_genres.length; i++){
-        genres.push(chosen_genres[i].id);
-    }
-    let results = await getPopularMovies(genres, 1, []);
-
-    if (results === undefined || results.length === 0){
-        document.getElementById("response-tit").textContent = "Sorry! No popular movies had that genre combination :(";
-    } else {
-        genMovies(results);
-    }
-    
-}
-
-async function getRated(ev){
-    let chosen_genres = document.getElementsByClassName("active");
-    let genres = [];
-    for (let i = 0; i<chosen_genres.length; i++){
-        genres.push(chosen_genres[i].id);
-    }
-    let results = await getRatedMovies(genres, 1, []);
-    //console.log(results);
-    if (results === undefined || results.length === 0){
-        document.getElementById("response-tit").textContent = "Sorry! No top-rated movies had that genre combination :(";
-    } else {
-        genMovies(results);
-    }
-}
-
-// Handling front-end request bar
-function resetRequest(ev){
-    $('#buttons').replaceWith(buttons());
-    $('#movieresponse').replaceWith(emptyRes());
-    $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
-    $("#movie_complete").textContent = '';
-    $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
-    $('#similar').on("click", getSim);
-};
-
-function genRequest(ev, alt){
-    ev.target.className += " active";
-}
-
-//aesthetic documentation: https://getbootstrap.com/docs/4.0/components/list-group/ 
-
-async function getSim(even){
-    even.target.className += " active";
-    let movie = document.getElementById("movie_complete").value.trim();
-    let result = await searchMovie(movie);
-    //console.log(result);
-    if (result.results === undefined || result.results.length === 0){
-        document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
-    } else {
-        document.getElementById("response-tit").textContent = "Here are movies similar to " + result.results[0].original_title.trim() + ":";
-        let sim_result = await getSimilarMovies(result.results[0].id);
-
-        if (sim_result.results === undefined || sim_result.results.length === 0){
-            document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
-        } else {
-            genMovies(sim_result.results);
-        }
-    
-}
-}
-
- function genFavBut(){
-    let but = document.createElement("button");
-    but.className = "btn btn-outline-danger fav";
-    but.addEventListener("click", storeMovieInfo);
-    let ii = document.createElement("i");
-    ii.className = "fa fa-heart";
-    but.append(ii);
-    return but;
- }
-
+// generates the movie objects 
+// the tmdb-specific id for the movie is stored in the div's id that surrounds the title and favoriting button
 function genMovies(movies){
     let imp = document.createElement('div');
     imp.className = "list-group";
@@ -236,5 +274,4 @@ function genMovies(movies){
         imp.append(ap);
     }
     document.getElementById("response").replaceWith(imp);
-    //window.location.href = "movies.html#movieresponse";
 }

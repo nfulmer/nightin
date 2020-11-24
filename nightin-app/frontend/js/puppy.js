@@ -1,8 +1,15 @@
-
+/**
+ * Generates the generic url to be added to for RecipePuppy API
+ * @constant
+ */
 const baseURL = () => {
     return 'https://recipe-puppy.p.rapidapi.com/?p=1&';
 }
-
+/**
+ * Generates the generic base request for RecipePuppy API
+ * We use Rapid API as a proximity to access RecipePuppy, so it uses Nate's account key
+ * @constant
+ */
 const defaultReq = () => {
     return {
         "method": "GET",
@@ -13,21 +20,20 @@ const defaultReq = () => {
     }
 }
 
-
-//expects ingredients array, space seperated string for the search term
-export async function makeRequest(ingredients, searchTerm){
+/**
+ * Generates the correct url and request parameters for the RecipePuppy API
+ * @param {string array} ingredients - ingredients to pass to search recipes on
+ * Output is json object with the recipes contained in the 'results' key
+ */
+export async function makeRequest(ingredients){
     let base = baseURL();
     if (ingredients != [""]){
         base += "i=";
         let i;
         for (i in ingredients){
             if (i == 0){
-                //base += ingredients[i].toLowerCase().replace(/[^a-z\d ]+/i, '').replace(" ", "%20");
                 base += encodeURIComponent(ingredients[i].toLowerCase());
-
             } else {
-                //base += "%2C" + ingredients[i].toLowerCase();
-                
                 base += "%2C" + encodeURIComponent(ingredients[i].toLowerCase());
             }
         }
