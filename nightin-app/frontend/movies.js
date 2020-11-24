@@ -65,9 +65,10 @@ function resetRequest(ev){
     $('#buttons').replaceWith(buttons());
     $('#movieresponse').replaceWith(emptyRes());
     $("#similar").replaceWith(`<button type="button" class="btn btn-outline-danger" id="similar">Get similar movies</button>`);
-    $("#movie_complete").textContent = '';
+    $("#movie_complete").replaceWith(`<input type="text" class="form-control" id="movie_complete" placeholder="Enter your favorite movie here">`);
     $("#request").replaceWith(`<input type="text" class="form-control" id="request" placeholder="Enter your favorite movie">`);
     $('#similar').on("click", getSim);
+    $("#movie_complete").on('input', debounce(handleInput, 400));
 };
 
 // changes genre buttons to active when selected
@@ -161,6 +162,7 @@ async function getRated(ev){
     if (results === undefined || results.length === 0){
         document.getElementById("response-tit").textContent = "Sorry! No top-rated movies had that genre combination :(";
     } else {
+        document.getElementById("response-tit").textContent = "Here are some movies you might like:";
         genMovies(results);
     }
 }
@@ -183,6 +185,7 @@ async function getSim(even){
         if (sim_result.results === undefined || sim_result.results.length === 0){
             document.getElementById("response-tit").textContent = "Sorry! No movies found :(";
         } else {
+            document.getElementById("response-tit").textContent = "Here are some movies you might like:";
             genMovies(sim_result.results);
         }
     }   

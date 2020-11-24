@@ -140,8 +140,7 @@ function emptyList(){
     document.getElementById('autocomplete-list').replaceWith(a);
 }
 
-// generates a selected ingredient button when someone hits enter from the 
-// ingredient input bar
+// generates a selected ingredient button when someone hits enter from the ingredient input bar
 function addBut(event){
     let newBut = document.createElement("button");
     let color; 
