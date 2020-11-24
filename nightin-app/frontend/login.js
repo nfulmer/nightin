@@ -1,18 +1,16 @@
 $(function() {
-    $('form').on("click", "#btnlogin", handleLoginSubmit);
-    $('form').on("click", "#btnsignup", handleSignUp);
+    $('form').on("click", "#btnlogin", handleLoginSubmit); // login button pressed
+    $('form').on("click", "#btnsignup", handleSignUp); // signup button pressed
 });
 
 const handleLoginSubmit = function(e) {
     e.preventDefault();
     var email = $("#email").val();
     var pass = $("#pass").val();
-    if ( email == "" || pass=="" )
-    {
+    if ( email == "" || pass=="" ) { // missing values - inform user
         $('#pMessage').html(messages.LoginMessage1);
     }
-    else
-    {
+    else { // call submit login function
         $('#pMessage').html(messages.EmptyString);
         submitLogin(email, pass);
     }
@@ -32,17 +30,18 @@ export const submitLogin = async function(email, pass) {
         json: true,
         data: data_string
     })
-    if(response[0].name === 'NOT_FOUND') {
+
+    if(response[0].name === 'NOT_FOUND') { // incorrect login info entered, inform user
          $('#pMessage').html(messages.LoginMessage2);
     }
-    else { 
+    else { // successfil login - change header, take to profile page
         window.sessionStorage.setItem('name', response[0].name);
         window.sessionStorage.setItem('login', response[0].login);
         window.location.href = "profile.html";  
     }
 }
 
-const handleSignUp = function(e) {
+const handleSignUp = function(e) { // take user to signup page
     e.preventDefault();
     window.location.href = "signup.html";
 }

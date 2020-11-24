@@ -2,8 +2,8 @@ $(function () {
     loadHeader();
 });
 
-const loadHeader = function() {
-    let view = 
+const loadHeader = function() { 
+    let view = // header for user that has not logged in
     `<nav class="navbar navbar-expand-lg bg-danger fixed-top" id="mainNav">
     <a class="navbar-brand" href="/index"> <img src="assets/img/bby.png" height=40px width=40px>Night In </a>
         <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
@@ -17,7 +17,7 @@ const loadHeader = function() {
          </div>
     </nav>`
 
-    let view2 = 
+    let view2 = // header for loggin in user
     `<nav class="navbar navbar-expand-lg bg-danger fixed-top" id="mainNav">
     <a class="navbar-brand" href="/index"> <img src="assets/img/bby.png" height=40px width=40px>Night In </a>
         <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
@@ -32,11 +32,11 @@ const loadHeader = function() {
          </div>
     </nav>`
 
-    let logginname = window.sessionStorage.getItem('name');
+    let logginname = window.sessionStorage.getItem('name'); // display name of the user
     const $divRoot = $('#divroot');
 
-    if (logginname == null)
+    if (logginname == null) // name not found, user not logged in, diaplay first header
         $divRoot.append(view);
     else
-        $divRoot.append(view2);
+        $divRoot.append(view2); // name found, user logged in, display second header
 }

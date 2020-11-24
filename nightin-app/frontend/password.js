@@ -1,6 +1,6 @@
 $(function() {
-    $('form').on("click", "#btnUpdatePassword", handleUpdate);
-   $('#email').val(window.sessionStorage.getItem('login'));
+    $('form').on("click", "#btnUpdatePassword", handleUpdate); // update password button is pressed
+   $('#email').val(window.sessionStorage.getItem('login')); // display user's email information
 });
 
 const handleUpdate = function(e) {
@@ -9,12 +9,10 @@ const handleUpdate = function(e) {
     var passold = $("#passold").val();
     var passnew = $("#passnew").val();
 
-    if ( email == "" || passold=="" || passnew=="")
-    {
+    if ( email == "" || passold=="" || passnew=="") { // missing information - inform user
         $('#pMessage').html(messages.SignupMessage1);
     }
-    else
-    {
+    else { // call submit update function
         $('#pMessage').html(messages.EmptyString);
         submitUpdate(email, passold, passnew);
     }
@@ -36,16 +34,10 @@ export const submitUpdate = async function(email, passold, passnew) {
         data: data_string
     })
 
-    if(response) {
+    if(response) { // password change completed
         $('#pMessage').html(messages.PasswordMessage1);   
     }
-    else { 
+    else { // information is incorrect - inform user to enter new values
         $('#pMessage').html(messages.SignupMessage3);
     }
-}
-
-const handleEmailfocus = function(e) {
-    e.preventDefault();
-
-    $('#pMessage').html(''); 
 }

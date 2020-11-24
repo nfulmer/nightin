@@ -1,8 +1,8 @@
 $(function() {
-    $('form').on("click",fnLogout());
+    $('form').on("click",fnLogout()); // logout is clicked
 });
 
-function fnLogout(){
+function fnLogout(){ // clear user data and move to index
     window.sessionStorage.clear();
     window.location.href = "index.html"; 
 }

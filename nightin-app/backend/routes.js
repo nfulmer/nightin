@@ -22,16 +22,16 @@ router.get('/login', (req, res) => {
     res.sendFile('login.html', {'root': __dirname + '/../frontend'});
 });
 
-router.get('/logout', (req, res) => {
-    res.sendFile('logout.html', {'root': __dirname + '/../frontend'});
+router.get('/signup', (req, res) => {
+    res.sendFile('signup.html', {'root': __dirname + '/../frontend'});
 });
 
 router.get('/profile', (req, res) => {
     res.sendFile('profile.html', {'root': __dirname + '/../frontend'});
 });
 
-router.get('/signup', (req, res) => {
-    res.sendFile('signup.html', {'root': __dirname + '/../frontend'});
+router.get('/logout', (req, res) => {
+    res.sendFile('logout.html', {'root': __dirname + '/../frontend'});
 });
 
 router.get('/contact', (req, res) => {

@@ -1,7 +1,5 @@
-
-
 $(function() {
-    $('form').on("click", "#btnsignup", handleSignUpSubmit);
+    $('form').on("click", "#btnsignup", handleSignUpSubmit); // signup button pressed
 });
 
 const handleSignUpSubmit = function(e) {
@@ -11,12 +9,10 @@ const handleSignUpSubmit = function(e) {
     var pass = $("#pass").val();
     var fname = $("#fname").val();
     var lname = $("#lname").val();
-    if ( email == "" || pass=="" || fname ==""|| lname=="")
-    {
+    if ( email == "" || pass=="" || fname ==""|| lname=="") { // missing values - inform user
         $('#pMessage').html(messages.SignupMessage1);
-      }
-    else
-    {
+    }
+    else { // call submit signup function
         $('#pMessage').html(messages.EmptyString);
         submitSignUp(email, pass, fname, lname);
     }
@@ -41,14 +37,14 @@ export const submitSignUp = async function(email, pass, fname, lname) {
 
     console.log(response);
 
-    if(response[0].result === 'USER_ALREADY_EXISTS') {
+    if(response[0].result === 'USER_ALREADY_EXISTS') { // email has been used and stored in database
         $('#pMessage').html(messages.SignupMessage2);
-     }
-    else if (response[0].result === 'UPDATE_FAILED'){ 
+    }
+    else if (response[0].result === 'UPDATE_FAILED') {  // error entering information - ask user to enter new values
         $('#pMessage').html(messages.SignupMessage3); 
-       }
-    else  {
+    }
+    else  { // user created take them to the login page
         $('#pMessage').html(messages.SignupMessage4);
         setTimeout(function(){window.location.href = "login.html";}, 3000);
-     } 
+    } 
 }

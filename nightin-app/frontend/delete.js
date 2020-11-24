@@ -1,6 +1,6 @@
 $(function() {
-    $('form').on("click", "#btnDeleteAccount", handleDelete);
-    $('#email').val(window.sessionStorage.getItem('login'));
+    $('form').on("click", "#btnDeleteAccount", handleDelete); // delete account button pressed
+    $('#email').val(window.sessionStorage.getItem('login')); // display email of logged in user
 });
 
 const handleDelete = function(e) {
@@ -8,12 +8,10 @@ const handleDelete = function(e) {
     var email = $("#email").val();
     var pass = $("#pass").val();
 
-    if ( email == "" || pass=="" )
-    {
+    if ( email == "" || pass=="" ) { // return an error message if user leaves missing values
         $('#pMessage').html(messages.SignupMessage1);
     }
-    else
-    {
+    else { // call submit delete function
         $('#pMessage').html(messages.EmptyString);
         submitDelete(email, pass);
     }
@@ -34,11 +32,11 @@ export const submitDelete = async function(email, pass) {
         data: data_string
     })
 
-    if(response) {
+    if(response) { // log out user if account is deleted successfully
         $('#pMessage').html(messages.DeleteMessage1);
          window.location.href = "logout.html"; 
         }
-    else {
+    else { // incorrect info - tell user to input new values
         $('#pMessage').html(messages.SignupMessage3);
-        }
+    }
 }
